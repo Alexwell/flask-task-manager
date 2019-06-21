@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Task manager</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.bundle.css') }}"/>
-</head>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.bundle.css') }}" />
+  </head>
 
-<body>
-{% block content %}
-{% endblock %}
-<script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
-</body>
+  <body>
+    {% block content %} {% endblock %}
+    <script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+  </body>
 </html>

@@ -1,4 +1,4 @@
-# $ export FLASK_APP=microblog.py
+# $ export FLASK_APP=task_manager.py
 # $ export FLASK_DEBUG=1
 
 #DB migration: 

@@ -1,0 +1,20 @@
+$font-main: Arial,
+Helvetica,
+sans-serif;
+
+$font-alt: Helvetica,
+sans-serif;
+
+$bg-color:#fff;
+$main-color:#4973ae;
+$main-border: #315589;
+$upper-bottom-string:#000;
+
+@import "~bootstrap/scss/bootstrap";
+@import "./variables";
+@import "./main";
+@import "./signin";
+@import "./header";
+@import "./list";
+@import "./footer";
+@import "./media";

@@ -1,0 +1,24 @@
+@media (max-width: 768px) {
+    .img-mid {
+        border-right: none !important;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .list-header-buttons {
+        img {
+            border-right: none;
+        }
+    }
+}
+
+
+@media (max-width: 420px) {
+    .task-buttons {
+        img {
+            border-right: none;
+        }
+    }
+}

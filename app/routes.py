@@ -3,13 +3,21 @@ from flask import render_template, url_for, request, jsonify
 from app import app
 
 
+def ajax_route(route):
+    default_route = '/api/'
+    if isinstance(route, str):
+        return default_route + route
+    else:
+        raise TypeError('route is not string')
+
+
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
 
 
-@app.route('/test', methods=['POST'])
+@app.route(ajax_route('test'), methods=['POST'])
 def test():
     for i in request.form:
         print(f'{i} ===> {request.form[i]}')

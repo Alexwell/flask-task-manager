@@ -5,13 +5,25 @@ import bootstrap from "bootstrap";
 
 
 $(document).ready(function () {
+    const requestsRoute = '//127.0.0.1:5000/api/';
+
+    function routeAjax(route) {
+        if (typeof route === 'string'){
+            return requestsRoute + route
+        }
+        else {
+            console.log('Wrong route')
+        }
+    }
+
+
     $('#signIn').click(function () {
         console.log('test');
         testRequest();
     });
 
     function testRequest() {
-        $.post('/test', {
+        $.post(routeAjax('test'), {
             testParamStr: 'Hello from front end',
             testParamNumber: 29,
             testParamBull: true

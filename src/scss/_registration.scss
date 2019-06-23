@@ -1,4 +1,4 @@
-.signin {
+.registration {
   font-family: $font-alt;
   display: -ms-flexbox;
   display: flex;
@@ -32,22 +32,16 @@
   }
 
   input {
-    margin-bottom: 20px;
+    margin: 10px 0 14px 0;
   }
 
 
   .btn-registration {
+    margin-top: 10px;
     color: #fff;
     background-color: $main-color;
     border-color: $main-color;
   }
-
-}
-
-
-.middle-password {
-  //margin-bottom: 0!important;
-  //border-radius: 0;
 
 }
 

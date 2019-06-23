@@ -40,47 +40,53 @@ const config = {
         ]
     },
     module: {
-        rules: [{
-            test: /\.(sass|scss)$/,
-            include: path.resolve(__dirname, "src/scss"),
-            use: [{
-                loader: MiniCssExtractPlugin.loader,
-                options: {}
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader"
             },
-                {
-                    loader: "css-loader",
-                    options: {
-                        sourceMap: true,
-                        url: false
-                    }
+            {
+                test: /\.(sass|scss)$/,
+                include: path.resolve(__dirname, "src/scss"),
+                use: [{
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {}
                 },
-                {
-                    loader: "postcss-loader",
-                    options: {
-                        ident: "postcss",
-                        sourceMap: true,
-                        plugins: () => [
-                            require("cssnano")({
-                                preset: [
-                                    "default",
-                                    {
-                                        discardComments: {
-                                            removeAll: true
+                    {
+                        loader: "css-loader",
+                        options: {
+                            sourceMap: true,
+                            url: false
+                        }
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            ident: "postcss",
+                            sourceMap: true,
+                            plugins: () => [
+                                require("cssnano")({
+                                    preset: [
+                                        "default",
+                                        {
+                                            discardComments: {
+                                                removeAll: true
+                                            }
                                         }
-                                    }
-                                ]
-                            })
-                        ]
+                                    ]
+                                })
+                            ]
+                        }
+                    },
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            sourceMap: true
+                        }
                     }
-                },
-                {
-                    loader: "sass-loader",
-                    options: {
-                        sourceMap: true
-                    }
-                }
-            ]
-        },
+                ]
+            },
             {
                 test: /\.html$/,
                 include: path.resolve(__dirname, "src/html/includes"),

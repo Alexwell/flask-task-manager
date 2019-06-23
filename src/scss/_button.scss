@@ -1,0 +1,22 @@
+.add {
+  margin: 50px auto 0 auto;
+  max-width: 210px;
+  height: 48px;
+  background-color: $main-color;
+  border: 1px solid $main-border;
+  display: $display-mode;
+
+  p {
+    font-size: 17px;
+    display: inline;
+    font-weight: bold;
+    line-height: 27px;
+    color: $bg-color;
+  }
+
+  img {
+    display: block;
+    float: left;
+  }
+
+}

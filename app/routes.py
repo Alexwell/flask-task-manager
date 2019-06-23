@@ -4,7 +4,7 @@ from app import app
 
 
 def ajax_route(route):
-    default_route = '/api/'
+    default_route = '/json/'
     if isinstance(route, str):
         return default_route + route
     else:
@@ -25,7 +25,7 @@ def test():
     response_str = request.form['testParamStr'] + '! Hello from back end!'
     response_int = int(request.form['testParamNumber']) + 71
     response_float = float(request.form['testParamNumber']) + 71.8
-    response_bull = not request.form['testParamBull']
+    response_bull = True
 
     return jsonify({'response_str': response_str,
                     'response_int': response_int,

@@ -1,0 +1,56 @@
+.signin {
+  font-family: $font-alt;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-bottom: 40px;
+}
+
+.form-registration {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-registration {
+  .checkbox {
+    font-weight: 400;
+  }
+
+  .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .form-control:focus {
+    z-index: 2;
+  }
+
+  input {
+    margin-bottom: 20px;
+  }
+
+
+  .btn-registration {
+    color: #fff;
+    background-color: $main-color;
+    border-color: $main-color;
+  }
+
+}
+
+
+.middle-password {
+  //margin-bottom: 0!important;
+  //border-radius: 0;
+
+}
+
+
+
+

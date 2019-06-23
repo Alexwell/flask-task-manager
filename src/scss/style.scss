@@ -5,16 +5,18 @@ sans-serif;
 $font-alt: Helvetica,
 sans-serif;
 
-$bg-color:#fff;
-$main-color:#4973ae;
-$main-border: #315589;
-$upper-bottom-string:#000;
+//$bg-color:#fff;
+//$main-color:#4973ae;
+//$main-border: #315589;
+//$upper-bottom-string:#000;
 
 @import "~bootstrap/scss/bootstrap";
 @import "./variables";
 @import "./main";
 @import "./signin";
+@import "./registration";
 @import "./header";
 @import "./list";
+@import "./button";
 @import "./footer";
 @import "./media";

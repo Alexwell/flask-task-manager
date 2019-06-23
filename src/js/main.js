@@ -1,10 +1,11 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-import validate from "jquery-validation"
+import validate from 'jquery-validation'
 
 export function main() {
     $(document).ready(function () {
         const requestsRoute = '//127.0.0.1:5000/json/';
+        const _validateMinLength = 2;
 
         function routeAjax(route) {
             if (typeof route === 'string') {
@@ -17,11 +18,11 @@ export function main() {
 
         $('#signIn').click(function () {
             console.log('test');
-            // if (validateLogin()) {
-            //     testRequest();
-            // }
-            // showAfterLogin();
-            // hideLogin();
+        });
+
+        $('#registerNow').click(function () {
+            hideLogin();
+            showRegistration();
         });
 
         function testRequest() {
@@ -34,31 +35,53 @@ export function main() {
                     console.log(i + ' ===> ' + response[i]);
                 }
                 if (response['response_bull']) {
-                    showAfterLogin();
                     hideLogin();
+                    showAfterLogin();
                 }
             }).fail(function () {
                 console.log('No response')
             })
         }
 
+        function registrationRequest() {
+            $.post(routeAjax('registration'), {
+
+            }).done(function (response) {
+                for (let i in response) {
+                    console.log(i + ' ===> ' + response[i]);
+                }
+                if (response['response_bull']) {
+                    console.log(response['response_test']);
+                    hideRegistration();
+                    showLogin();
+                }
+            }).fail(function () {
+                console.log('No response')
+            })
+        }
+
+
         function showAfterLogin() {
-            $("#listDefault, #buttonDefault, #registrationContainer").show("slow");
+            $('#listDefault, #buttonDefault').show('slow');
+        }
+
+        function showLogin() {
+            $('#signInContainer').show('slow');
         }
 
         function hideLogin() {
-            $("#signInContainer").hide();
+            $('#signInContainer').hide();
+        }
+
+        function showRegistration() {
+            $('#registration').show('slow')
+        }
+
+        function hideRegistration() {
+            $('#registration').hide()
         }
 
         $('#loginForm').validate({
-
-            //TODO
-            //
-            // errorPlacement: function (error, element) {
-            //
-            //     error.insertBefore('#errorField');
-            // },
-
             rules: {
                 email: {
                     required: true,
@@ -67,14 +90,34 @@ export function main() {
                 },
                 password: {
                     required: true,
-                    // rangelength: [7, 35]
-                    minlength: 7,
+                    minlength: _validateMinLength,
                     maxlength: 35
                 }
             },
-            // success: "valid",
+            // success: 'valid',
             submitHandler: function () {
                 testRequest();
+            }
+        });
+
+        $('#registrationForm').validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                    maxlength: 35
+                },
+                password: {
+                    required: true,
+                    minlength: _validateMinLength,
+                    maxlength: 35
+                },
+                passwordConfirm: {
+                    equalTo: '#registrationPassword'
+                }
+            },
+            submitHandler: function () {
+                registrationRequest();
             }
         });
     });

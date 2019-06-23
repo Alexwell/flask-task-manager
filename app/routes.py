@@ -32,3 +32,9 @@ def test():
                     'response_float': response_float,
                     'response_bull': response_bull
                     })
+
+
+@app.route(ajax_route('registration'), methods=['POST'])
+def registration():
+    return jsonify({'response_test': 'Registration route tested!',
+                    'response_bull': True})

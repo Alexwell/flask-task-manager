@@ -1,14 +1,25 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from flask import render_template, url_for, request, jsonify
-from app import app
+from flask_login import current_user, login_user, logout_user, login_required
+from app import app, db
+from app.models import User
+from app.forms import RegistrationForm
 
 
 def ajax_route(route):
-    default_route = '/json/'
+    _default_route = '/json/'
     if isinstance(route, str):
-        return default_route + route
+        return _default_route + route
     else:
         raise TypeError('route is not string')
+
+
+# @app.before_request
+# def before_request():
+#     if current_user.is_authenticated:
+#         current_user.last_seen = datetime.utcnow()
+#         db.session.commit()
 
 
 @app.route('/')
@@ -36,5 +47,19 @@ def test():
 
 @app.route(ajax_route('registration'), methods=['POST'])
 def registration():
-    return jsonify({'response_test': 'Registration route tested!',
-                    'response_bull': True})
+    for i in request.form:
+        print(f'{i} ===> {request.form[i]}')
+    if current_user.is_authenticated:
+        return jsonify({'response_test': 'user_already signed in!'})
+
+    form = RegistrationForm(request.form)
+    print(form.validate_on_submit())
+    if form.validate_on_submit():
+        user = User(email=form.registration_email.data)
+        user.set_password(form.registration_password.data)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'response_test': 'Registration success!',
+                        'response_bull': True})
+
+    return jsonify({'response_test': 'Not registered!'})

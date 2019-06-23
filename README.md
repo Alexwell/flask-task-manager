@@ -2,7 +2,10 @@
 # $ export FLASK_ENV=development
 # $ export FLASK_DEBUG=1
 
-#DB migration: 
+# DB init:
+## $ flask db init 
+
+# DB migration: 
 ## $ flask db migrate -m "name"
 ## $ flask db upgrade
 

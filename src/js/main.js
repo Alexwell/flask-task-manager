@@ -1,15 +1,16 @@
 import $ from 'jquery';
 
-import validate from 'jquery-validation'
+import validate from 'jquery-validation';
 
 export function main() {
     $(document).ready(function () {
-        const requestsRoute = '//127.0.0.1:5000/json/';
+        const _requestsRoute = '//127.0.0.1:5000/json/';
         const _validateMinLength = 2;
+        const _validateMaxLength = 64;
 
         function routeAjax(route) {
             if (typeof route === 'string') {
-                return requestsRoute + route
+                return _requestsRoute + route
             } else {
                 console.log('Wrong route')
             }
@@ -45,7 +46,9 @@ export function main() {
 
         function registrationRequest() {
             $.post(routeAjax('registration'), {
-
+                registration_email:$('#registrationEmail').val(),
+                registration_password:$('#registrationPassword').val(),
+                registration_password_confirm:$('#confirmRegistrationPassword').val()
             }).done(function (response) {
                 for (let i in response) {
                     console.log(i + ' ===> ' + response[i]);
@@ -86,12 +89,12 @@ export function main() {
                 email: {
                     required: true,
                     email: true,
-                    maxlength: 35
+                    maxlength: _validateMaxLength
                 },
                 password: {
                     required: true,
                     minlength: _validateMinLength,
-                    maxlength: 35
+                    maxlength: _validateMaxLength
                 }
             },
             // success: 'valid',
@@ -102,17 +105,17 @@ export function main() {
 
         $('#registrationForm').validate({
             rules: {
-                email: {
+                registration_email: {
                     required: true,
                     email: true,
-                    maxlength: 35
+                    maxlength: _validateMaxLength
                 },
-                password: {
+                registration_password: {
                     required: true,
                     minlength: _validateMinLength,
-                    maxlength: 35
+                    maxlength: _validateMaxLength
                 },
-                passwordConfirm: {
+                registration_password_confirm: {
                     equalTo: '#registrationPassword'
                 }
             },

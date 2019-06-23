@@ -195,7 +195,7 @@
           <label for="registrationEmail" class="sr-only">Email address</label>
           <input
             type="email"
-            name="email"
+            name="registration_email"
             class="form-control"
             placeholder="Email address"
             id="registrationEmail"
@@ -206,7 +206,7 @@
           <label for="registrationPassword" class="sr-only">Password</label>
           <input
             type="password"
-            name="password"
+            name="registration_password"
             class="middle-password form-control"
             placeholder="Password"
             id="registrationPassword"
@@ -215,7 +215,7 @@
           <label for="confirmRegistrationPassword" class="sr-only">Password</label>
           <input
             type="password"
-            name="passwordConfirm"
+            name="registration_password_confirm"
             class="form-control"
             placeholder="Confirm password"
             id="confirmRegistrationPassword"
@@ -226,8 +226,21 @@
                  <input type="checkbox" value="remember-me"> Remember me
              </label>
          </div>-->
-          <button id="registrationBtn" class="btn btn-lg btn-block btn-registration" type="submit">Register</button>
+          <button
+            id="registrationBtn"
+            class="btn btn-lg btn-block btn-registration"
+            name="registration_password_submit"
+            type="submit"
+          >
+            Register
+          </button>
         </form>
+        <!--  <form action="//127.0.0.1:5000/json/registration" method="post">
+        <input type="email" name="registration_email">
+        <input type="password" name="registration_password">
+        <input type="password" name="registration_password_confirm">
+        <input type="submit" name="registration_password_submit" id="">
+    </form> -->
       </div>
     </main>
 

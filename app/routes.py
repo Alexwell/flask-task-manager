@@ -4,7 +4,7 @@ from flask import render_template, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import User
-from app.forms import RegistrationForm
+from app.forms import RegistrationForm, LoginForm
 
 
 def ajax_route(route):
@@ -53,8 +53,8 @@ def registration():
         return jsonify({'response_test': 'user_already signed in!'})
 
     form = RegistrationForm(request.form)
-    print(form.validate_on_submit())
-    if form.validate_on_submit():
+    print(form.validate())
+    if form.validate():
         user = User(email=form.registration_email.data)
         user.set_password(form.registration_password.data)
         db.session.add(user)
@@ -63,3 +63,21 @@ def registration():
                         'response_bull': True})
 
     return jsonify({'response_test': 'Not registered!'})
+
+
+@app.route(ajax_route('login'), methods=['POST'])
+def login():
+    for i in request.form:
+        print(f'{i} ===> {request.form[i]}')
+
+    if current_user.is_authenticated:
+        return jsonify({'login_test': 'user_already signed in!'})
+    form = LoginForm(request.form)
+    print(form.validate())
+    if form.validate():
+        user = User.query.filter_by(email=form.login_email.data).first()
+        if user is None or not user.check_password(form.login_password.data):
+            return jsonify({'login_response_status': False})
+        login_user(user)
+        return jsonify({'login_response_status': True})
+    return jsonify({'login_test': 'Not logged'})

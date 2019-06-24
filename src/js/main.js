@@ -5,7 +5,7 @@ import validate from 'jquery-validation';
 export function main() {
     $(document).ready(function () {
         const _requestsRoute = '//127.0.0.1:5000/json/';
-        const _validateMinLength = 2;
+        const _validateMinLength = 3;
         const _validateMaxLength = 64;
 
         function routeAjax(route) {
@@ -17,38 +17,38 @@ export function main() {
         }
 
 
-        $('#signIn').click(function () {
-            console.log('test');
-        });
+        // $('#signIn').click(function () {
+        //     console.log('test');
+        // });
 
         $('#registerNow').click(function () {
             hideLogin();
             showRegistration();
         });
 
-        function testRequest() {
-            $.post(routeAjax('test'), {
-                testParamStr: 'Hello from front end',
-                testParamNumber: 29,
-                testParamBull: true
-            }).done(function (response) {
-                for (let i in response) {
-                    console.log(i + ' ===> ' + response[i]);
-                }
-                if (response['response_bull']) {
-                    hideLogin();
-                    showAfterLogin();
-                }
-            }).fail(function () {
-                console.log('No response')
-            })
-        }
+        // function testRequest() {
+        //     $.post(routeAjax('test'), {
+        //         testParamStr: 'Hello from front end',
+        //         testParamNumber: 29,
+        //         testParamBull: true
+        //     }).done(function (response) {
+        //         for (let i in response) {
+        //             console.log(i + ' ===> ' + response[i]);
+        //         }
+        //         if (response['response_bull']) {
+        //             hideLogin();
+        //             showAfterLogin();
+        //         }
+        //     }).fail(function () {
+        //         console.log('No response')
+        //     })
+        // }
 
         function registrationRequest() {
             $.post(routeAjax('registration'), {
-                registration_email:$('#registrationEmail').val(),
-                registration_password:$('#registrationPassword').val(),
-                registration_password_confirm:$('#confirmRegistrationPassword').val()
+                registration_email: $('#registrationEmail').val(),
+                registration_password: $('#registrationPassword').val(),
+                registration_password_confirm: $('#confirmRegistrationPassword').val()
             }).done(function (response) {
                 for (let i in response) {
                     console.log(i + ' ===> ' + response[i]);
@@ -57,6 +57,24 @@ export function main() {
                     console.log(response['response_test']);
                     hideRegistration();
                     showLogin();
+                }
+            }).fail(function () {
+                console.log('No response')
+            })
+        }
+
+        function loginRequest() {
+            $.post(routeAjax('login'), {
+                login_email: $('#loginEmail').val(),
+                login_password: $('#loginPassword').val(),
+            }).done(function (response) {
+                for (let i in response) {
+                    console.log(i + ' ===> ' + response[i]);
+                }
+                if (response['login_response_status']) {
+                    console.log(response['login_response_status']);
+                    hideLogin();
+                    showAfterLogin();
                 }
             }).fail(function () {
                 console.log('No response')
@@ -99,7 +117,7 @@ export function main() {
             },
             // success: 'valid',
             submitHandler: function () {
-                testRequest();
+                loginRequest();
             }
         });
 

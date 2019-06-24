@@ -1,18 +1,39 @@
 header {
-    font-family: $font-alt;
-    text-align: center;
-    text-transform: uppercase;
-    border-top: 6px solid $upper-bottom-string;
-    margin-bottom: 60px;
-  
-    h1 {
-      padding-top: 60px;
-      margin-bottom: 0;
-      font-size: 22px;
-      font-weight: bold;
-    }
-  
-    h2 {
-      font-size: 16px;
-    }
+  font-family: $font-alt;
+  text-align: center;
+  text-transform: uppercase;
+  border-top: 6px solid $upper-bottom-string;
+  margin-bottom: 60px;
+
+  .logout{
+    display: $display-mode;
+    position: absolute;
+    right: 0;
+    text-transform: none;
+    margin: 5px 20px 0 0px;
+
   }
+
+  .logout:hover {
+    cursor: pointer;
+    color: $main-color;
+  }
+
+
+
+
+
+  h1 {
+
+
+    padding-top: 60px;
+    margin-bottom: 0;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  h2 {
+
+    font-size: 16px;
+  }
+}

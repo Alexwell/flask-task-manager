@@ -28,23 +28,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route(ajax_route('test'), methods=['POST'])
-def test():
-    for i in request.form:
-        print(f'{i} ===> {request.form[i]}')
-
-    response_str = request.form['testParamStr'] + '! Hello from back end!'
-    response_int = int(request.form['testParamNumber']) + 71
-    response_float = float(request.form['testParamNumber']) + 71.8
-    response_bull = True
-
-    return jsonify({'response_str': response_str,
-                    'response_int': response_int,
-                    'response_float': response_float,
-                    'response_bull': response_bull
-                    })
-
-
 @app.route(ajax_route('registration'), methods=['POST'])
 def registration():
     for i in request.form:
@@ -59,8 +42,7 @@ def registration():
         user.set_password(form.registration_password.data)
         db.session.add(user)
         db.session.commit()
-        return jsonify({'response_test': 'Registration success!',
-                        'response_bull': True})
+        return jsonify({'registration_response_status': 'registration_success'})
 
     return jsonify({'response_test': 'Not registered!'})
 
@@ -76,8 +58,17 @@ def login():
     print(form.validate())
     if form.validate():
         user = User.query.filter_by(email=form.login_email.data).first()
-        if user is None or not user.check_password(form.login_password.data):
-            return jsonify({'login_response_status': False})
+        if user is None:
+            return jsonify({'login_response_status': 'wrong_login'})
+        if not user.check_password(form.login_password.data):
+            return jsonify({'login_response_status': 'wrong_password'})
+
         login_user(user)
-        return jsonify({'login_response_status': True})
+        return jsonify({'login_response_status': 'login_success'})
     return jsonify({'login_test': 'Not logged'})
+
+
+@app.route(ajax_route('logout'), methods=['POST'])
+def logout():
+    logout_user()
+    return jsonify({'logout_response_status': 'logout_success'})

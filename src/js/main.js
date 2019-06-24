@@ -8,7 +8,7 @@ export function main() {
         const _validateMinLength = 3;
         const _validateMaxLength = 64;
 
-        function routeAjax(route) {
+        function _routeAjax(route) {
             if (typeof route === 'string') {
                 return _requestsRoute + route
             } else {
@@ -17,73 +17,75 @@ export function main() {
         }
 
 
-        // $('#signIn').click(function () {
-        //     console.log('test');
-        // });
-
         $('#registerNow').click(function () {
             hideLogin();
             showRegistration();
         });
 
-        // function testRequest() {
-        //     $.post(routeAjax('test'), {
-        //         testParamStr: 'Hello from front end',
-        //         testParamNumber: 29,
-        //         testParamBull: true
-        //     }).done(function (response) {
-        //         for (let i in response) {
-        //             console.log(i + ' ===> ' + response[i]);
-        //         }
-        //         if (response['response_bull']) {
-        //             hideLogin();
-        //             showAfterLogin();
-        //         }
-        //     }).fail(function () {
-        //         console.log('No response')
-        //     })
-        // }
+        $('#signInLink').click(function () {
+            hideRegistration();
+            showLogin();
+        });
+
+
+        $('#userLogout').click(function () {
+            logoutRequest()
+        });
+
 
         function registrationRequest() {
-            $.post(routeAjax('registration'), {
+            $.post(_routeAjax('registration'), {
                 registration_email: $('#registrationEmail').val(),
                 registration_password: $('#registrationPassword').val(),
                 registration_password_confirm: $('#confirmRegistrationPassword').val()
             }).done(function (response) {
-                for (let i in response) {
-                    console.log(i + ' ===> ' + response[i]);
-                }
-                if (response['response_bull']) {
-                    console.log(response['response_test']);
+                if (response['registration_response_status'] === 'registration_success') {
                     hideRegistration();
                     showLogin();
                 }
             }).fail(function () {
-                console.log('No response')
+                console.log('No registration response')
             })
         }
 
         function loginRequest() {
-            $.post(routeAjax('login'), {
+            $.post(_routeAjax('login'), {
                 login_email: $('#loginEmail').val(),
                 login_password: $('#loginPassword').val(),
             }).done(function (response) {
-                for (let i in response) {
-                    console.log(i + ' ===> ' + response[i]);
-                }
-                if (response['login_response_status']) {
+                if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     hideLogin();
                     showAfterLogin();
+                } else {
+                    console.log(response['login_response_status']);
                 }
             }).fail(function () {
-                console.log('No response')
+                console.log('No login response');
             })
+        }
+
+        function logoutRequest() {
+            $.post(_routeAjax('logout'), {}).done(function (response) {
+
+                if (response['logout_response_status'] === 'logout_success') {
+                    console.log(response['logout_response_status']);
+                    hideAfterLogin();
+                    showLogin();
+                }
+            }).fail(function () {
+                console.log('No logout response')
+            })
+
         }
 
 
         function showAfterLogin() {
-            $('#listDefault, #buttonDefault').show('slow');
+            $('#listDefault, #buttonDefault, #userLogout').show('slow');
+        }
+
+        function hideAfterLogin() {
+            $('#listDefault, #buttonDefault, #userLogout').hide();
         }
 
         function showLogin() {
@@ -95,12 +97,13 @@ export function main() {
         }
 
         function showRegistration() {
-            $('#registration').show('slow')
+            $('#registration').show('slow');
         }
 
         function hideRegistration() {
-            $('#registration').hide()
+            $('#registration').hide();
         }
+
 
         $('#loginForm').validate({
             rules: {

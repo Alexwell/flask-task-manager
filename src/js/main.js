@@ -56,7 +56,7 @@ export function main() {
                 if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     hideLogin();
-                    showAfterLogin();
+                    showAfterLogin(response['user_data']);
                 } else {
                     console.log(response['login_response_status']);
                 }
@@ -80,7 +80,14 @@ export function main() {
         }
 
 
-        function showAfterLogin() {
+        function showAfterLogin(userData) {
+            for (let i in userData) {
+                console.log(i + '===>' + userData[i])
+            }
+
+            $('#userEmail').text(userData.user_email);
+            $('#userID').text(userData.user_id);
+
             $('#listDefault, #buttonDefault, #userLogout').show('slow');
         }
 

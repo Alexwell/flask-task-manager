@@ -64,7 +64,12 @@ def login():
             return jsonify({'login_response_status': 'wrong_password'})
 
         login_user(user)
-        return jsonify({'login_response_status': 'login_success'})
+        return jsonify({'login_response_status': 'login_success',
+                        'user_data': {
+                            'user_email': user.email,
+                            'user_id': user.id,
+                        }
+                        })
     return jsonify({'login_test': 'Not logged'})
 
 

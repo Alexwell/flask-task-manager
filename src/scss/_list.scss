@@ -1,9 +1,14 @@
+.list-container {
+  display: $display-mode;
+}
+
 .list {
   margin-bottom: 40px;
   display: $display-mode;
 }
 
-.label-error{
+
+.label-error {
   width: auto;
   height: auto;
   position: relative;

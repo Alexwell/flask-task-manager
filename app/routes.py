@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import render_template, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from app.models import User
+from app.models import User, List
 from app.forms import RegistrationForm, LoginForm
 
 
@@ -52,13 +52,9 @@ def registration():
 
 @app.route(ajax_route('login'), methods=['POST'])
 def login():
-    for i in request.form:
-        print(f'{i} ===> {request.form[i]}')
-
     if current_user.is_authenticated:
         return jsonify({'login_test': 'user_already signed in!'})
     form = LoginForm(request.form)
-    print(form.validate())
     if form.validate():
         user = User.query.filter_by(email=form.login_email.data).first()
         if user is None:
@@ -80,3 +76,16 @@ def login():
 def logout():
     logout_user()
     return jsonify({'logout_response_status': 'logout_success'})
+
+
+@app.route(ajax_route('addTODOList'), methods=['POST'])
+# @login_required
+def add_todo_list():
+    print('testttt')
+    print(current_user.is_authenticated)
+    # print(current_user.email)
+    # add_list = List(label=current_user.email, author=current_user)
+    # db.session.add(add_list)
+    # db.session.commit()
+    return jsonify({'addTODOList_response_status': 'addTODOList_success'})
+

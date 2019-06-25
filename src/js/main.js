@@ -8,6 +8,7 @@ export function main() {
         const _validateMinLength = 3;
         const _validateMaxLength = 64;
 
+
         function _routeAjax(route) {
             if (typeof route === 'string') {
                 return _requestsRoute + route
@@ -30,6 +31,10 @@ export function main() {
 
         $('#userLogout').click(function () {
             logoutRequest()
+        });
+
+        $('#addTODOList').click(function () {
+            addTODOList()
         });
 
 
@@ -96,19 +101,29 @@ export function main() {
         }
 
 
+        function addTODOListRequest() {
+            $.post(_routeAjax('addTODOList'), {}).done(function (response) {
+                console.log(response);
+            }).fail(function () {
+                console.log('No addTODOList response')
+            })
+        }
+
+
         function showAfterLogin(userData) {
             for (let i in userData) {
                 console.log(i + '===>' + userData[i])
             }
 
-            $('#userEmail').text(userData.user_email);
-            $('#userID').text(userData.user_id);
+            // $('#userEmail').text(userData.user_email);
+            // $('#userID').text(userData.user_id);
 
-            $('#listDefault, #buttonDefault, #userLogout').show('slow');
+
+            $('#listDefault, #addTODOList, #userLogout').show('slow');
         }
 
         function hideAfterLogin() {
-            $('#listDefault, #buttonDefault, #userLogout').hide();
+            $('#listsContainer, #addTODOList, #userLogout').hide();
         }
 
         function showLogin() {
@@ -125,6 +140,17 @@ export function main() {
 
         function hideRegistration() {
             $('#registration').hide();
+        }
+
+        let listCounter = 1;
+
+
+        function addTODOList() {
+            $('#listName').text(listCounter);
+            $('#listsContainer').append($('#listContainer').html());
+            $('#listsContainer>#listDefault').attr('id', 'listDefault' + listCounter);
+            listCounter++;
+            addTODOListRequest();
         }
 
 
@@ -179,3 +205,7 @@ export function main() {
         });
     });
 }
+
+
+
+

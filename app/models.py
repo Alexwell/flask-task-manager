@@ -9,6 +9,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    lists = db.relationship('List', backref='author', lazy='dynamic')
+
     # last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -19,6 +21,15 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class List(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(250))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return f'<Label {self.label}, id {self.id}, user_id {self.user_id}>'
 
 
 @login.user_loader

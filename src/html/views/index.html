@@ -1,8 +1,8 @@
 <% var data = {
-  title: "Task manager",
-  copyright: "\xA9 Lorem ipsum",
-  jinjaLeft: "static/",
-  jinjaRight: ""
+title: "Task manager",
+copyright: "\xA9 Lorem ipsum",
+jinjaLeft: "static/",
+jinjaRight: ""
 }; %>
 
 <%= _.template(require('./../includes/top.html'))(data) %>
@@ -10,12 +10,17 @@
 
 <main>
 
-<%= _.template(require('./../includes/list.html'))(data)%>
+    <section id="listsContainer">
+        <div id="listContainer" class="list-container">
 
-<%= _.template(require('./../includes/button.html'))(data)%>
+            <%= _.template(require('./../includes/list.html'))(data)%>
+        </div>
+    </section>
 
-<%= _.template(require('./../includes/signin.html'))(data)%>
-<%= _.template(require('./../includes/registration.html'))(data)%>
+    <%= _.template(require('./../includes/button.html'))(data)%>
+
+    <%= _.template(require('./../includes/signin.html'))(data)%>
+    <%= _.template(require('./../includes/registration.html'))(data)%>
 
 </main>
 

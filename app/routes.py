@@ -30,14 +30,17 @@ def index():
 
 @app.route(ajax_route('registration'), methods=['POST'])
 def registration():
-    for i in request.form:
-        print(f'{i} ===> {request.form[i]}')
+    for k in request.form:
+        print(f'{k} ===> {request.form[k]}')
     if current_user.is_authenticated:
         return jsonify({'response_test': 'user_already signed in!'})
 
     form = RegistrationForm(request.form)
     print(form.validate())
     if form.validate():
+        check_user = User.query.filter_by(email=form.registration_email.data).first()
+        if check_user is not None:
+            return jsonify({'registration_response_status': 'email_already_exist'})
         user = User(email=form.registration_email.data)
         user.set_password(form.registration_password.data)
         db.session.add(user)

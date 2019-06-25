@@ -160,7 +160,6 @@
         <form class="form-registration" id="loginForm">
           <!-- <img class="mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
           <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
-          <label for="loginEmail" class="sr-only">Email address</label>
           <input
             type="email"
             name="email"
@@ -170,7 +169,8 @@
             required
             autofocus
           />
-          <label for="loginPassword" class="sr-only">Password</label>
+          <label for="loginEmail" class="sr-only" id="loginEmailError">Email address</label>
+
           <input
             type="password"
             name="password"
@@ -179,6 +179,7 @@
             id="loginPassword"
             required
           />
+          <label for="loginPassword" class="sr-only" id="loginPasswordError">Password</label>
 
           <!--  <div class="checkbox mb-3" id="errorField">
              <label>
@@ -193,7 +194,6 @@
         <form class="form-registration" id="registrationForm">
           <!-- <img class="mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
           <h1 class="h3 mb-3 font-weight-normal">Register now!</h1>
-          <label for="registrationEmail" class="sr-only">Email address</label>
           <input
             type="email"
             name="registration_email"
@@ -203,8 +203,8 @@
             required
             autofocus
           />
+          <label for="registrationEmail" class="sr-only" id="emailValidationError">Email address</label>
 
-          <label for="registrationPassword" class="sr-only">Password</label>
           <input
             type="password"
             name="registration_password"
@@ -213,7 +213,8 @@
             id="registrationPassword"
             required
           />
-          <label for="confirmRegistrationPassword" class="sr-only">Password</label>
+          <label for="registrationPassword" class="sr-only">Password</label>
+
           <input
             type="password"
             name="registration_password_confirm"
@@ -222,6 +223,8 @@
             id="confirmRegistrationPassword"
             required
           />
+          <label for="confirmRegistrationPassword" class="sr-only">Password</label>
+
           <!--  <div class="checkbox mb-3" id="errorField">
              <label>
                  <input type="checkbox" value="remember-me"> Remember me
@@ -237,12 +240,6 @@
           </button>
           <div class="register-now text-center" id="signInLink"><p>Sign in</p></div>
         </form>
-        <!--  <form action="//127.0.0.1:5000/json/registration" method="post">
-          <input type="email" name="registration_email">
-          <input type="password" name="registration_password">
-          <input type="password" name="registration_password_confirm">
-          <input type="submit" name="registration_password_submit" id="">
-      </form> -->
       </div>
     </main>
 

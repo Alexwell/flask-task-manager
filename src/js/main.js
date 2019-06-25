@@ -39,6 +39,12 @@ export function main() {
                 registration_password: $('#registrationPassword').val(),
                 registration_password_confirm: $('#confirmRegistrationPassword').val()
             }).done(function (response) {
+                console.log(response)
+                if (response['registration_response_status'] === 'email_already_exist') {
+                    console.log("wrong mail");
+                    $('#emailValidationError').addClass('label-error');
+                    $('#emailValidationError').text('Email already exist')
+                }
                 if (response['registration_response_status'] === 'registration_success') {
                     hideRegistration();
                     showLogin();
@@ -53,6 +59,16 @@ export function main() {
                 login_email: $('#loginEmail').val(),
                 login_password: $('#loginPassword').val(),
             }).done(function (response) {
+                if (response['login_response_status'] === 'wrong_login') {
+                    console.log("wrong login");
+                    $('#loginEmailError').addClass('label-error');
+                    $('#loginEmailError').text('Email is not exist')
+                }
+                if (response['login_response_status'] === 'wrong_password') {
+                    console.log("wrong password");
+                    $('#loginPasswordError').addClass('label-error');
+                    $('#loginPasswordError').text('Wrong password')
+                }
                 if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     hideLogin();
@@ -147,6 +163,16 @@ export function main() {
                     equalTo: '#registrationPassword'
                 }
             },
+            // messages: {
+            //     registration_email: {
+            //         required: 'test required',
+            //         email: 'test mail'
+            //     }
+            // },
+            // errorPlacement: function (error, element) {
+            //     $('#errorTxt').append(error)
+            //
+            // },
             submitHandler: function () {
                 registrationRequest();
             }

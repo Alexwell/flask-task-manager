@@ -10,10 +10,10 @@ class RegistrationForm(FlaskForm):
     registration_password = PasswordField(validators=[DataRequired(), Length(min=3, max=64)])
     registration_password_confirm = PasswordField(validators=[EqualTo('registration_password')])
 
-    def validate_registration_email(self, registration_email):
-        user = User.query.filter_by(email=registration_email.data).first()
-        if user is not None:
-            raise ValidationError('Use a different email.')
+    # def validate_registration_email(self, registration_email):
+    #     user = User.query.filter_by(email=registration_email.data).first()
+    #     if user is not None:
+    #         raise ValidationError('Use a different email.')
 
 
 class LoginForm(FlaskForm):

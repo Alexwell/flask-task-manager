@@ -37,6 +37,10 @@ export function main() {
             addTODOList()
         });
 
+        $('#addTask').click(function () {
+            addTask()
+        });
+
 
         function registrationRequest() {
             $.post(_routeAjax('registration'), {
@@ -106,6 +110,15 @@ export function main() {
                 console.log(response);
             }).fail(function () {
                 console.log('No addTODOList response')
+            })
+        }
+
+
+        function addTask() {
+            $.post(_routeAjax('addTask'), {}).done(function (response) {
+                console.log(response);
+            }).fail(function () {
+                console.log('No addTask response')
             })
         }
 

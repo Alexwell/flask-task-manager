@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import render_template, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from app.models import User, List
+from app.models import User, List, Tasks
 from app.forms import RegistrationForm, LoginForm
 
 
@@ -79,13 +79,22 @@ def logout():
 
 
 @app.route(ajax_route('addTODOList'), methods=['POST'])
-# @login_required
+@login_required
 def add_todo_list():
-    print('testttt')
     print(current_user.is_authenticated)
-    # print(current_user.email)
-    # add_list = List(label=current_user.email, author=current_user)
-    # db.session.add(add_list)
-    # db.session.commit()
+    print(current_user.email)
+    print(current_user.id)
+    add_list = List(label=current_user.email, user_id=current_user.id)
+    db.session.add(add_list)
+    db.session.commit()
     return jsonify({'addTODOList_response_status': 'addTODOList_success'})
 
+
+@app.route(ajax_route('addTask'), methods=['POST'])
+@login_required
+def add_task():
+    print(current_user.email)
+    task = Tasks(name=current_user.email, list_id=777)
+    db.session.add(task)
+    db.session.commit()
+    return jsonify({'addTask_response_status': 'addTask_success'})

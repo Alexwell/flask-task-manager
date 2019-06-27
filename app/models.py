@@ -27,9 +27,20 @@ class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(250))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    tasks = db.relationship('Tasks', backref='list', lazy='dynamic')
 
     def __repr__(self):
         return f'<Label {self.label}, id {self.id}, user_id {self.user_id}>'
+
+
+class Tasks(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250))
+    status = db.Column(db.Boolean, default=False, nullable=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('list.id'))
+
+    def __repr__(self):
+        return f'<Name {self.name}, id {self.id}, status {self.status}, list_id {self.list_id}>'
 
 
 @login.user_loader

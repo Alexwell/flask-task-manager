@@ -12,7 +12,7 @@
   <body>
     <header>
       <div class="logout" id="userLogout"><p>logout</p></div>
-      <h1 id="addTask">LOREM IPSUM DOLOR</h1>
+      <h1>LOREM IPSUM DOLOR</h1>
       <h2>LOREM IPSUM DOLOR</h2>
     </header>
 
@@ -31,12 +31,10 @@
                             <td>
                               <img class="" src="static/img/datelist.png" alt="datelist" />
                             </td>
-                            <td id="listName">
-                              Lorem ipsum dolor sit amet.
-                            </td>
+                            <td id="listName" data-list-id=""></td>
                             <td>
                               <div class="list-header-buttons">
-                                <img src="static/img/pencil.png" alt="pencil" />
+                                <img src="static/img/pencil.png" alt="pencil" id="editListLabel" data-list-id="" />
                                 <img src="static/img/del.png" alt="del" />
                               </div>
                             </td>
@@ -55,7 +53,7 @@
                                   aria-describedby="button-addon2"
                                 />
                                 <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary btn-add" type="button" id="button-addon2">
+                                  <button class="btn btn-outline-secondary btn-add" type="button" id="addTask">
                                     Add Task
                                   </button>
                                 </div>

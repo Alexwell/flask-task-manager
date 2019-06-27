@@ -34,11 +34,17 @@ export function main() {
         });
 
         $('#addTODOList').click(function () {
-            addTODOList()
+            addTODOListRequest();
         });
 
         $('#addTask').click(function () {
             addTask()
+        });
+
+        $(document).on('click', '#editListLabel', function () {
+            console.log(this);
+            editTODOListLabel();
+            console.log(2);
         });
 
 
@@ -107,9 +113,22 @@ export function main() {
 
         function addTODOListRequest() {
             $.post(_routeAjax('addTODOList'), {}).done(function (response) {
+                $('#listName').text(response['current_user_email'] + ' new task!');
+                $('#editListLabel').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
+                addTODOList();
             }).fail(function () {
                 console.log('No addTODOList response')
+            })
+        }
+
+        function editTODOListLabel() {
+            $.post(_routeAjax('editTODOListLabel'), {
+                todo_list_label: $(this).data('list-id')
+            }).done(function (response) {
+                console.log('true!')
+            }).fail(function () {
+                console.log('fail!!')
             })
         }
 
@@ -159,11 +178,15 @@ export function main() {
 
 
         function addTODOList() {
-            $('#listName').text(listCounter);
+            // $('.list').css('visibility','visible');
+            // $('#addTask').attr('id', 'addTask' + listCounter);
+            // $('#listName').text(listCounter);
             $('#listsContainer').append($('#listContainer').html());
             $('#listsContainer>#listDefault').attr('id', 'listDefault' + listCounter);
+            // $('#listsContainer #addTask').attr('id', 'listDefault' + listCounter);
+
             listCounter++;
-            addTODOListRequest();
+            // addTODOListRequest();
         }
 
 

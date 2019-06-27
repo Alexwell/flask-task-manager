@@ -87,7 +87,19 @@ def add_todo_list():
     add_list = List(label=current_user.email, user_id=current_user.id)
     db.session.add(add_list)
     db.session.commit()
-    return jsonify({'addTODOList_response_status': 'addTODOList_success'})
+    list_id = List.query.filter_by(user_id=current_user.id).order_by(List.id.desc()).first()
+    print(f'===> {list_id.id}')
+    return jsonify({'current_user_email': current_user.email,
+                    'current_list_id': list_id.id})
+
+
+@app.route(ajax_route('editTODOListLabel'), methods=['POST'])
+@login_required
+def edit_todo_list_label():
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+
+    return jsonify({'logout_response_status': 'logout_success'})
 
 
 @app.route(ajax_route('addTask'), methods=['POST'])

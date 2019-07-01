@@ -62,11 +62,17 @@ def login():
         if not user.check_password(form.login_password.data):
             return jsonify({'login_response_status': 'wrong_password'})
 
+        lists = List.query.filter_by(user_id=user.id, del_status=False).all()
+        lists_id = []
+        for i in lists:
+            lists_id.append(i.id)
+        print(lists_id)
         login_user(user)
         return jsonify({'login_response_status': 'login_success',
                         'user_data': {
                             'user_email': user.email,
                             'user_id': user.id,
+                            'user_lists': lists_id
                         }
                         })
     return jsonify({'login_test': 'Not logged'})
@@ -93,6 +99,23 @@ def add_todo_list():
                     'current_list_id': list_id.id})
 
 
+@app.route(ajax_route('delTODOList'), methods=['POST'])
+@login_required
+def del_todo_list():
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+    list_to_del = List.query.filter_by(id=request.form['list_id']).first()
+    print(list_to_del)
+    if list_to_del:
+        print(list_to_del.del_status)
+        list_to_del.del_status = True
+        print(list_to_del.del_status)
+        db.session.commit()
+        return jsonify({'remove_list_response_status': 'remove_list_success'})
+    else:
+        return jsonify({'remove_list_response_status': 'remove_list_failed'})
+
+
 @app.route(ajax_route('editTODOListLabel'), methods=['POST'])
 @login_required
 def edit_todo_list_label():
@@ -100,10 +123,13 @@ def edit_todo_list_label():
         print(i, '===> ', request.form[i])
 
     list_to_change = List.query.filter_by(id=request.form['todo_list_id']).first()
-    list_to_change.label = request.form['todo_list_name']
-    db.session.commit()
-
-    return jsonify({'edit_todo_list_status': list_to_change.label})
+    if list_to_change:
+        list_to_change.label = request.form['todo_list_name']
+        db.session.commit()
+        return jsonify({'edit_todo_list_status': 'success',
+                        'new_label': list_to_change.label})
+    else:
+        return jsonify({'edit_todo_list_status': 'wrong list id'})
 
 
 @app.route(ajax_route('addTask'), methods=['POST'])

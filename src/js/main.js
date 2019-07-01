@@ -42,40 +42,30 @@ export function main() {
         });
 
         $(document).on('click', '#editListLabel', function () {
-            // console.log(this);
-            console.log('=====>  ', $(this).data('list-id'));
-            // let listId = $(this).data('list-id');
 
-            console.log($(this).parent());
-            console.log($(this).parentsUntil('thead'));
-            console.log($(this).parentsUntil('thead').find('div#editListGroup'));
-
-            $(this).parentsUntil('thead').find('div#name').hide();  //TODO reshow
+            $(this).parentsUntil('thead').find('div#name').hide();
             $(this).parentsUntil('thead').find('div#editListGroup').show();
 
-            // $(this).parent().text('test pencil');
-            // $(this).parentsUntil('thead').text('test22');
-
-
-            // let newName = editTODOListLabel(listId);
-            // console.log(newName);
         });
+
+
+        $(document).on('click', '#delListLabel', function () {
+            let listId = $(this).data('list-id'),
+                hideElement = $(this).parentsUntil('div.list');
+
+            delTODOListRequest(listId, hideElement);
+
+        });
+
 
         $(document).on('click', '#editListBtn', function () {
             let listId = $(this).data('list-id'),
                 listName = $(this).prev().val(),  //TODO change prev()
-                hide = $(this).parent();
+                hideElement = $(this).parent();
             console.log(listName);
 
-            editTODOListLabel(listId, listName, hide);
-
-            // $(this).parent().hide();
-
+            editTODOListLabelRequest(listId, listName, hideElement);
         });
-
-
-
-
 
 
         function registrationRequest() {
@@ -84,7 +74,7 @@ export function main() {
                 registration_password: $('#registrationPassword').val(),
                 registration_password_confirm: $('#confirmRegistrationPassword').val()
             }).done(function (response) {
-                console.log(response)
+                console.log(response);
                 if (response['registration_response_status'] === 'email_already_exist') {
                     console.log("wrong mail");
                     $('#emailValidationError').addClass('label-error');
@@ -107,7 +97,7 @@ export function main() {
                 if (response['login_response_status'] === 'wrong_login') {
                     console.log("wrong login");
                     $('#loginEmailError').addClass('label-error');
-                    $('#loginEmailError').text('Email is not exist')
+                    $('#loginEmailError').text('Wrong email')
                 }
                 if (response['login_response_status'] === 'wrong_password') {
                     console.log("wrong password");
@@ -145,6 +135,7 @@ export function main() {
             $.post(_routeAjax('addTODOList'), {}).done(function (response) {
                 // $('#listName').text(response['current_user_email'] + ' new task!');
                 $('#editListLabel').attr('data-list-id', (response['current_list_id']));
+                $('#delListLabel').attr('data-list-id', (response['current_list_id']));
                 $('#editListBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
                 addTODOList();
@@ -153,24 +144,35 @@ export function main() {
             })
         }
 
+        function delTODOListRequest(listId, hideElement) {
+            $.post(_routeAjax('delTODOList'), {
+                list_id: listId
+            }).done(function (response) {
+                if (response['remove_list_response_status'] === 'remove_list_success') {
+                    hideElement.text('')
+                }
+            }).fail(function () {
+                console.log('Fail del')
+            })
 
-        function editTODOListLabel(listId, listName, toHideContent) {
 
-            // console.log('=========>',toHideContent);
+        }
+
+
+        function editTODOListLabelRequest(listId, listName, toHideContent) {
             $.post(_routeAjax('editTODOListLabel'), {
                 todo_list_id: listId,
                 todo_list_name: listName
             }).done(function (response) {
                 console.log(response['edit_todo_list_status']);
-                toHideContent.hide();
-                toHideContent.prev().text(response['edit_todo_list_status']);
-                toHideContent.prev().show();
-                // toHideContent.parent().text(response['edit_todo_list_status']);
-                // changeListName(response['edit_todo_list_status'])
+                if (response['edit_todo_list_status'] === 'success') {
+                    toHideContent.hide();
+                    toHideContent.prev().text(response['new_label']);
+                    toHideContent.prev().show();
+                }
 
-                // return response['edit_todo_list_status'];
             }).fail(function () {
-                console.log('fail!!')
+                console.log('List edit failed');
             });
         }
 
@@ -188,6 +190,8 @@ export function main() {
             for (let i in userData) {
                 console.log(i + '===>' + userData[i])
             }
+
+            console.log(userData);
 
             // $('#userEmail').text(userData.user_email);
             // $('#userID').text(userData.user_id);
@@ -216,7 +220,7 @@ export function main() {
             $('#registration').hide();
         }
 
-        let listCounter = 1;
+        // let listCounter = 1;
 
 
         function addTODOList() {
@@ -224,10 +228,10 @@ export function main() {
             // $('#addTask').attr('id', 'addTask' + listCounter);
             // $('#listName').text(listCounter);
             $('#listsContainer').append($('#listContainer').html());
-            $('#listsContainer>#listDefault').attr('id', 'listDefault' + listCounter);
+            // $('#listsContainer>#listDefault').attr('id', 'listDefault' + listCounter);
             // $('#listsContainer #addTask').attr('id', 'listDefault' + listCounter);
 
-            listCounter++;
+            // listCounter++;
             // addTODOListRequest();
         }
 

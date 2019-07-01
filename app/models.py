@@ -26,17 +26,19 @@ class User(UserMixin, db.Model):
 class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(250))
+    del_status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tasks = db.relationship('Tasks', backref='list', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Label {self.label}, id {self.id}, user_id {self.user_id}>'
+        return f'<Label {self.label}, id {self.id}, user_id {self.user_id}, del_status {self.del_status}>'
 
 
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
     status = db.Column(db.Boolean, default=False, nullable=False)
+    done_status = db.Column(db.Boolean, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'))
 
     def __repr__(self):

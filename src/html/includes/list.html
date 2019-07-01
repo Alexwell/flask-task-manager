@@ -10,14 +10,26 @@
                                 <td>
                                     <img class="" src="<%=jinjaLeft%>img/datelist.png<%=jinjaRight%>"
                                          alt="datelist">
-                                </td>
-                                <td id="listName" data-list-id="">
 
+                                </td>
+
+                                <td id="listName">
+                                    <div id="name"></div>
+                                    <div class="input-group" id="editListGroup">
+                                        <input type="text" class="form-control list-add-placeholder"
+                                               placeholder="Edit list name..."
+                                               aria-label="Rec uname" aria-describedby="button-addon2" id="editListTxt">
+
+                                            <button class="btn btn-outline-secondary btn-add" type="button"
+                                                    id="editListBtn">Edit
+                                            </button>
+                                    </div>
                                 </td>
                                 <td>
 
                                     <div class="list-header-buttons">
-                                        <img src="<%=jinjaLeft%>img/pencil.png<%=jinjaRight%>" alt="pencil" id="editListLabel" data-list-id="">
+                                        <img src="<%=jinjaLeft%>img/pencil.png<%=jinjaRight%>" alt="pencil"
+                                             id="editListLabel" data-list-id="">
                                         <img src="<%=jinjaLeft%>img/del.png<%=jinjaRight%>" alt="del">
                                     </div>
                                 </td>

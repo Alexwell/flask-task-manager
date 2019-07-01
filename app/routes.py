@@ -99,7 +99,11 @@ def edit_todo_list_label():
     for i in request.form:
         print(i, '===> ', request.form[i])
 
-    return jsonify({'logout_response_status': 'logout_success'})
+    list_to_change = List.query.filter_by(id=request.form['todo_list_id']).first()
+    list_to_change.label = request.form['todo_list_name']
+    db.session.commit()
+
+    return jsonify({'edit_todo_list_status': list_to_change.label})
 
 
 @app.route(ajax_route('addTask'), methods=['POST'])

@@ -42,10 +42,40 @@ export function main() {
         });
 
         $(document).on('click', '#editListLabel', function () {
-            console.log(this);
-            editTODOListLabel();
-            console.log(2);
+            // console.log(this);
+            console.log('=====>  ', $(this).data('list-id'));
+            // let listId = $(this).data('list-id');
+
+            console.log($(this).parent());
+            console.log($(this).parentsUntil('thead'));
+            console.log($(this).parentsUntil('thead').find('div#editListGroup'));
+
+            $(this).parentsUntil('thead').find('div#name').hide();  //TODO reshow
+            $(this).parentsUntil('thead').find('div#editListGroup').show();
+
+            // $(this).parent().text('test pencil');
+            // $(this).parentsUntil('thead').text('test22');
+
+
+            // let newName = editTODOListLabel(listId);
+            // console.log(newName);
         });
+
+        $(document).on('click', '#editListBtn', function () {
+            let listId = $(this).data('list-id'),
+                listName = $(this).prev().val(),  //TODO change prev()
+                hide = $(this).parent();
+            console.log(listName);
+
+            editTODOListLabel(listId, listName, hide);
+
+            // $(this).parent().hide();
+
+        });
+
+
+
+
 
 
         function registrationRequest() {
@@ -113,8 +143,9 @@ export function main() {
 
         function addTODOListRequest() {
             $.post(_routeAjax('addTODOList'), {}).done(function (response) {
-                $('#listName').text(response['current_user_email'] + ' new task!');
+                // $('#listName').text(response['current_user_email'] + ' new task!');
                 $('#editListLabel').attr('data-list-id', (response['current_list_id']));
+                $('#editListBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
                 addTODOList();
             }).fail(function () {
@@ -122,14 +153,25 @@ export function main() {
             })
         }
 
-        function editTODOListLabel() {
+
+        function editTODOListLabel(listId, listName, toHideContent) {
+
+            // console.log('=========>',toHideContent);
             $.post(_routeAjax('editTODOListLabel'), {
-                todo_list_label: $(this).data('list-id')
+                todo_list_id: listId,
+                todo_list_name: listName
             }).done(function (response) {
-                console.log('true!')
+                console.log(response['edit_todo_list_status']);
+                toHideContent.hide();
+                toHideContent.prev().text(response['edit_todo_list_status']);
+                toHideContent.prev().show();
+                // toHideContent.parent().text(response['edit_todo_list_status']);
+                // changeListName(response['edit_todo_list_status'])
+
+                // return response['edit_todo_list_status'];
             }).fail(function () {
                 console.log('fail!!')
-            })
+            });
         }
 
 

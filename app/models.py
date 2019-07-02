@@ -33,6 +33,12 @@ class List(db.Model):
     def __repr__(self):
         return f'<Label {self.label}, id {self.id}, user_id {self.user_id}, del_status {self.del_status}>'
 
+    def to_json(self):
+        return {'id': self.id,
+                'label': self.label,
+                'tasks': []
+                }
+
 
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)

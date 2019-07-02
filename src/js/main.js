@@ -106,6 +106,7 @@ export function main() {
                 }
                 if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
+                    console.log('===>', response)
                     hideLogin();
                     showAfterLogin(response['user_data']);
                 } else {

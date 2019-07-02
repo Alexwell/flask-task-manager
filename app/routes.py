@@ -52,6 +52,34 @@ def registration():
 
 @app.route(ajax_route('login'), methods=['POST'])
 def login():
+    _test_tasks1 = [{'task_id': 777,
+                     'task_label': 'test task label 1 !!',
+                     'task_status': False,
+                     },
+                    {'task_id': 888,
+                     'task_label': 'test task label 2!!',
+                     'task_status': True,
+                     },
+                    {'task_id': 555,
+                     'task_label': 'test task label 3!!',
+                     'task_status': False,
+                     }
+                    ]
+
+    _test_tasks2 = [{'task_id': 222,
+                     'task_label': 'test task label 3.1!!',
+                     'task_status': False,
+                     },
+                    {'task_id': 444,
+                     'task_label': 'test task label 4!!',
+                     'task_status': True,
+                     },
+                    {'task_id': 999,
+                     'task_label': 'test task label 5 !!',
+                     'task_status': True,
+                     }
+                    ]
+
     if current_user.is_authenticated:
         return jsonify({'login_test': 'user_already signed in!'})
     form = LoginForm(request.form)
@@ -63,18 +91,40 @@ def login():
             return jsonify({'login_response_status': 'wrong_password'})
 
         lists = List.query.filter_by(user_id=user.id, del_status=False).all()
-        lists_id = []
+        lists_json = []
+        # print(lists)
+        counter = 0
         for i in lists:
-            lists_id.append(i.id)
-        print(lists_id)
+            print(i.id)
+            # tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).all()
+            lists_json.append(i.to_json())
+            # lists_json.append(_test_tasks1)
+            lists_json[counter]['tasks'] = _test_tasks1
+            counter += 1
+
+        print(lists_json)
+        # print(lists_json[1]['tasks'])
+
+        # lists_id, lists_label, lists_tasks = [], [], []
+        # for i in lists:
+        #     lists_id.append(i.id)
+        #     lists_label.append(i.label)
+        # print(lists_id)
         login_user(user)
+        # return jsonify({'login_response_status': 'login_success',
+        #                 'user_data': {
+        #                     'user_email': user.email,
+        #                     'user_id': user.id,
+        #                     'user_lists': {'lists_id': lists_id,
+        #                                    'lists_label': lists_label,
+        #                                    # 'lists_tasks': lists_tasks,
+        #                                    }
+        #                 }
+        #                 })
+
         return jsonify({'login_response_status': 'login_success',
-                        'user_data': {
-                            'user_email': user.email,
-                            'user_id': user.id,
-                            'user_lists': lists_id
-                        }
-                        })
+                        'lists_json': lists_json})
+
     return jsonify({'login_test': 'Not logged'})
 
 

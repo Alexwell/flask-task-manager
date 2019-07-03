@@ -42,13 +42,13 @@ class List(db.Model):
 
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250))
-    status = db.Column(db.Boolean, default=False, nullable=False)
+    name = db.Column(db.String(350))
+    del_status = db.Column(db.Boolean, default=False)
     done_status = db.Column(db.Boolean, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'))
 
     def __repr__(self):
-        return f'<Name {self.name}, id {self.id}, status {self.status}, list_id {self.list_id}>'
+        return f'<Name {self.name}, id {self.id}, status {self.del_status}, list_id {self.list_id}>'
 
 
 @login.user_loader

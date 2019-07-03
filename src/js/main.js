@@ -1,6 +1,10 @@
 import $ from 'jquery';
+import {testDiv} from "./test";
+
 
 import validate from 'jquery-validation';
+
+
 
 export function main() {
     $(document).ready(function () {
@@ -8,6 +12,9 @@ export function main() {
         const _validateMinLength = 3;
         const _validateMaxLength = 64;
 
+        let testDivTest = testDiv();
+
+        console.log(testDivTest);
 
         function _routeAjax(route) {
             if (typeof route === 'string') {
@@ -55,14 +62,13 @@ export function main() {
             editTODOListLabelRequest(listId, listName, hideElement);
         });
 
-         $(document).on('click', '#delListLabel', function () {
+        $(document).on('click', '#delListLabel', function () {
             let listId = $(this).data('list-id'),
                 hideElement = $(this).parentsUntil('div.list');
 
             delTODOListRequest(listId, hideElement);
 
         });
-
 
 
         $(document).on('click', '#addTaskBtn', function () {
@@ -113,9 +119,9 @@ export function main() {
                 }
                 if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
-                    console.log('===>', response)
+                    console.log('===>', response);
                     hideLogin();
-                    showAfterLogin(response['user_data']);
+                    showAfterLogin(response['user_lists']);
                 } else {
                     console.log(response['login_response_status']);
                 }
@@ -191,6 +197,11 @@ export function main() {
                 task_list_label: taskLabel
             }).done(function (response) {
                 console.log(response);
+                if (response['add_task_response_status'] === 'success') {
+                    // toHideContent.hide();
+                    // toHideContent.prev().text(response['new_label']);
+                    // toHideContent.prev().show();
+                }
             }).fail(function () {
                 console.log('No addTask response')
             })
@@ -199,7 +210,7 @@ export function main() {
 
         function showAfterLogin(userData) {
             for (let i in userData) {
-                console.log(i + '===>' + userData[i])
+                console.log(i + '===>' + userData[i].label)
             }
 
             console.log(userData);
@@ -207,7 +218,7 @@ export function main() {
             // $('#userEmail').text(userData.user_email);
             // $('#userID').text(userData.user_id);
 
-
+            $('#listDefault').html(testDivTest);
             $('#listDefault, #addTODOList, #userLogout').show('slow');
         }
 

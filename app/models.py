@@ -48,7 +48,13 @@ class Tasks(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'))
 
     def __repr__(self):
-        return f'<Name {self.name}, id {self.id}, status {self.del_status}, list_id {self.list_id}>'
+        return f'<Name {self.name}, id {self.id}, del status {self.del_status}, list_id {self.list_id}>'
+
+    def to_json(self):
+        return {'id': self.id,
+                'name': self.name,
+                'done_status': self.done_status
+                }
 
 
 @login.user_loader

@@ -96,10 +96,14 @@ def login():
         counter = 0
         for i in lists:
             print(i.id)
-            # tasks = Tasks.query.filter_by(list_id=i.id, status=False).all()
             lists_json.append(i.to_json())
             # lists_json.append(_test_tasks1)
-            lists_json[counter]['tasks'] = _test_tasks1
+            tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).all()
+            tasks_json = []
+            for j in tasks:
+                tasks_json.append((j.to_json()))
+
+            lists_json[counter]['tasks'] = tasks_json
             counter += 1
 
         print(lists_json)
@@ -121,9 +125,9 @@ def login():
         #                                    }
         #                 }
         #                 })
-
+        print(lists_json)
         return jsonify({'login_response_status': 'login_success',
-                        'lists_json': lists_json})
+                        'user_lists': lists_json})
 
     return jsonify({'login_test': 'Not logged'})
 
@@ -191,5 +195,5 @@ def add_task():
     db.session.add(task)
     db.session.commit()
 
-    return jsonify({'addTask_response_status': 'addTask_success',
+    return jsonify({'add_task_response_status': 'success',
                     'task_label': request.form['task_list_label']})

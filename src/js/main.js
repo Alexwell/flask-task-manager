@@ -1,9 +1,10 @@
 import $ from 'jquery';
-import {testDiv} from "./test";
+import {signIn} from "./templates/signIn";
+import {listsContainer} from "./templates/listsContainer";
+import {list} from "./templates/list";
 
 
 import validate from 'jquery-validation';
-
 
 
 export function main() {
@@ -12,9 +13,11 @@ export function main() {
         const _validateMinLength = 3;
         const _validateMaxLength = 64;
 
-        let testDivTest = testDiv();
 
-        console.log(testDivTest);
+        const signInTemplate = signIn();
+        const listsContainerTemplate = listsContainer();
+        const listTemplate = list();
+
 
         function _routeAjax(route) {
             if (typeof route === 'string') {
@@ -23,6 +26,9 @@ export function main() {
                 console.log('Wrong route')
             }
         }
+
+
+        $('main').html(signInTemplate);
 
 
         $('#registerNow').click(function () {
@@ -218,7 +224,10 @@ export function main() {
             // $('#userEmail').text(userData.user_email);
             // $('#userID').text(userData.user_id);
 
-            $('#listDefault').html(testDivTest);
+            // $('#listDefault').html(testDivTest);
+            $('main').html(listsContainer());
+            $('#listContainer').html(list());
+            $('#listContainer').append(list())
             $('#listDefault, #addTODOList, #userLogout').show('slow');
         }
 

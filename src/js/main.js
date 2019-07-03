@@ -37,23 +37,11 @@ export function main() {
             addTODOListRequest();
         });
 
-        $('#addTask').click(function () {
-            addTask()
-        });
 
         $(document).on('click', '#editListLabel', function () {
 
             $(this).parentsUntil('thead').find('div#name').hide();
             $(this).parentsUntil('thead').find('div#editListGroup').show();
-
-        });
-
-
-        $(document).on('click', '#delListLabel', function () {
-            let listId = $(this).data('list-id'),
-                hideElement = $(this).parentsUntil('div.list');
-
-            delTODOListRequest(listId, hideElement);
 
         });
 
@@ -65,6 +53,25 @@ export function main() {
             console.log(listName);
 
             editTODOListLabelRequest(listId, listName, hideElement);
+        });
+
+         $(document).on('click', '#delListLabel', function () {
+            let listId = $(this).data('list-id'),
+                hideElement = $(this).parentsUntil('div.list');
+
+            delTODOListRequest(listId, hideElement);
+
+        });
+
+
+
+        $(document).on('click', '#addTaskBtn', function () {
+
+            let listId = $(this).data('list-id'),
+                taskLabel = $(this).prev().val(); //TODO change prev()
+            // hideElement = $(this).parent();
+            addTask(listId, taskLabel)
+
         });
 
 
@@ -138,6 +145,7 @@ export function main() {
                 $('#editListLabel').attr('data-list-id', (response['current_list_id']));
                 $('#delListLabel').attr('data-list-id', (response['current_list_id']));
                 $('#editListBtn').attr('data-list-id', (response['current_list_id']));
+                $('#addTaskBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
                 addTODOList();
             }).fail(function () {
@@ -155,7 +163,6 @@ export function main() {
             }).fail(function () {
                 console.log('Fail del')
             })
-
 
         }
 
@@ -178,8 +185,11 @@ export function main() {
         }
 
 
-        function addTask() {
-            $.post(_routeAjax('addTask'), {}).done(function (response) {
+        function addTask(listId, taskLabel) {
+            $.post(_routeAjax('addTask'), {
+                task_list_id: listId,
+                task_list_label: taskLabel
+            }).done(function (response) {
                 console.log(response);
             }).fail(function () {
                 console.log('No addTask response')

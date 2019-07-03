@@ -96,7 +96,7 @@ def login():
         counter = 0
         for i in lists:
             print(i.id)
-            # tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).all()
+            # tasks = Tasks.query.filter_by(list_id=i.id, status=False).all()
             lists_json.append(i.to_json())
             # lists_json.append(_test_tasks1)
             lists_json[counter]['tasks'] = _test_tasks1
@@ -185,8 +185,11 @@ def edit_todo_list_label():
 @app.route(ajax_route('addTask'), methods=['POST'])
 @login_required
 def add_task():
-    print(current_user.email)
-    task = Tasks(name=current_user.email, list_id=777)
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+    task = Tasks(name=request.form['task_list_label'], list_id=request.form['task_list_id'])
     db.session.add(task)
     db.session.commit()
-    return jsonify({'addTask_response_status': 'addTask_success'})
+
+    return jsonify({'addTask_response_status': 'addTask_success',
+                    'task_label': request.form['task_list_label']})

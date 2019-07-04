@@ -2,6 +2,8 @@ import $ from 'jquery';
 import {signIn} from "./templates/signIn";
 import {listsContainer} from "./templates/listsContainer";
 import {list} from "./templates/list";
+import {logout} from "./templates/logout";
+import {button} from "./templates/button";
 
 
 import validate from 'jquery-validation';
@@ -14,11 +16,6 @@ export function main() {
         const _validateMaxLength = 64;
 
 
-        const signInTemplate = signIn();
-        const listsContainerTemplate = listsContainer();
-        const listTemplate = list();
-
-
         function _routeAjax(route) {
             if (typeof route === 'string') {
                 return _requestsRoute + route
@@ -28,7 +25,7 @@ export function main() {
         }
 
 
-        $('main').html(signInTemplate);
+        $('main').html(signIn());
 
 
         $('#registerNow').click(function () {
@@ -42,7 +39,7 @@ export function main() {
         });
 
 
-        $('#userLogout').click(function () {
+        $('#userLogout p').click(function () {
             logoutRequest()
         });
 
@@ -126,7 +123,7 @@ export function main() {
                 if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     console.log('===>', response);
-                    hideLogin();
+                    // hideLogin();
                     showAfterLogin(response['user_lists']);
                 } else {
                     console.log(response['login_response_status']);
@@ -215,20 +212,23 @@ export function main() {
 
 
         function showAfterLogin(userData) {
-            for (let i in userData) {
-                console.log(i + '===>' + userData[i].label)
-            }
+            // for (let i in userData) {
+            //     console.log(i + '===>' + userData[i].label)
+            // }
 
             console.log(userData);
 
-            // $('#userEmail').text(userData.user_email);
-            // $('#userID').text(userData.user_id);
-
-            // $('#listDefault').html(testDivTest);
+            $('#userLogout').html(logout());
             $('main').html(listsContainer());
-            $('#listContainer').html(list());
-            $('#listContainer').append(list())
-            $('#listDefault, #addTODOList, #userLogout').show('slow');
+            $('main').append(button());
+
+
+            for (let i in userData) {
+                $('#listContainer').append(list());
+            }
+
+
+            // $('#listDefault, #addTODOList, #userLogout').show('slow');
         }
 
         function hideAfterLogin() {

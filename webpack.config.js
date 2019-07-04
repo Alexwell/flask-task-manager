@@ -16,7 +16,7 @@ function generateHtmlPlugins(templateDir) {
         return new HtmlWebpackPlugin({
             filename: `${name}.html`,
             template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
-            inject: false
+            inject: false,
         });
     });
 }
@@ -26,7 +26,7 @@ const htmlPlugins = generateHtmlPlugins("./src/html/views");
 const config = {
     entry: ["./src/js/index.js", "./src/scss/style.scss"],
     output: {
-        filename: "./static/js/bundle.js",
+        filename: "./js/bundle.js",
         path: path.resolve(__dirname, distJinjaFolder)
     },
     devtool: "source-map",
@@ -34,7 +34,7 @@ const config = {
     optimization: {
         minimizer: [
             new TerserPlugin({
-                sourceMap: true,
+                sourceMap: false,
                 extractComments: true
             })
         ]
@@ -96,19 +96,19 @@ const config = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "./static/css/style.bundle.css"
+            filename: "./css/style.bundle.css"
         }),
         new CopyWebpackPlugin([{
             from: "./src/fonts",
-            to: "./static/fonts"
+            to: "./fonts"
         },
             {
                 from: "./src/favicon",
-                to: "./static/favicon"
+                to: "./favicon"
             },
             {
                 from: "./src/img",
-                to: "./static/img"
+                to: "./img"
             },
         ])
     ].concat(htmlPlugins)

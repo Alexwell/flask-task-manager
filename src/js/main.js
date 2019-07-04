@@ -5,10 +5,10 @@ import {list} from "./templates/list";
 import {logout} from "./templates/logout";
 import {button} from "./templates/button";
 import {editList} from "./templates/editList";
+import {task} from "./templates/task";
 
 
 import validate from 'jquery-validation';
-import {task} from "./templates/task";
 
 
 export function main() {
@@ -45,7 +45,11 @@ export function main() {
             logoutRequest()
         });
 
-        $('#addTODOList').click(function () {
+        // $('#addTODOList').click(function () {
+        //     addTODOListRequest();
+        // });
+
+        $(document).on('click', '#addTODOList', function () {
             addTODOListRequest();
         });
 
@@ -56,22 +60,17 @@ export function main() {
 
 
         $(document).on('click', '#editListBtn', function () {
-            // listId = $(this).data('list-id')
-
-
             let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
-                listName = $(this).prev().val(),  //TODO change prev()
+                listName = $(this).parentsUntil('thead').find('#editListTxt').val(),
                 change = $(this).parentsUntil('thead').find('#name');
             console.log(listId, listName);
-
             editTODOListLabelRequest(listId, listName, change);
         });
 
         $(document).on('click', '#delListLabel', function () {
-            let listId = $(this).data('list-id'),
-                hideElement = $(this).parentsUntil('div.list');
-
-            delTODOListRequest(listId, hideElement);
+            let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
+                delElement = $(this).parentsUntil('#listDefault');
+            delTODOListRequest(listId, delElement);
 
         });
 
@@ -153,30 +152,29 @@ export function main() {
         function addTODOListRequest() {
             $.post(_routeAjax('addTODOList'), {}).done(function (response) {
                 // $('#listName').text(response['current_user_email'] + ' new task!');
-                $('#editListLabel').attr('data-list-id', (response['current_list_id']));
-                $('#delListLabel').attr('data-list-id', (response['current_list_id']));
-                $('#editListBtn').attr('data-list-id', (response['current_list_id']));
-                $('#addTaskBtn').attr('data-list-id', (response['current_list_id']));
+                // $('#editListLabel').attr('data-list-id', (response['current_list_id']));
+                // $('#delListLabel').attr('data-list-id', (response['current_list_id']));
+                // $('#editListBtn').attr('data-list-id', (response['current_list_id']));
+                // $('#addTaskBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
-                addTODOList();
+                // addTODOList();
+                  $('#listsContainer').append(list(response['current_list_id'], response['current_user_email']));
             }).fail(function () {
                 console.log('No addTODOList response')
             })
         }
 
-        function delTODOListRequest(listId, hideElement) {
+        function delTODOListRequest(listId, delElement) {
             $.post(_routeAjax('delTODOList'), {
                 list_id: listId
             }).done(function (response) {
                 if (response['remove_list_response_status'] === 'remove_list_success') {
-                    hideElement.text('')
+                    delElement.remove();
                 }
             }).fail(function () {
                 console.log('Fail del')
             })
-
         }
-
 
         function editTODOListLabelRequest(listId, listName, change) {
             $.post(_routeAjax('editTODOListLabel'), {
@@ -191,7 +189,6 @@ export function main() {
                 console.log('List edit failed');
             });
         }
-
 
         function addTask(listId, taskLabel) {
             $.post(_routeAjax('addTask'), {
@@ -253,7 +250,7 @@ export function main() {
             // $('.list').css('visibility','visible');
             // $('#addTask').attr('id', 'addTask' + listCounter);
             // $('#listName').text(listCounter);
-            $('#listsContainer').append($('#listContainer').html());
+            $('#listsContainer').append(list('Default list name'));
             // $('#listsContainer>#listDefault').attr('id', 'listDefault' + listCounter);
             // $('#listsContainer #addTask').attr('id', 'listDefault' + listCounter);
 

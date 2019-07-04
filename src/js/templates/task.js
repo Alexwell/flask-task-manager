@@ -1,10 +1,10 @@
-export function task() {
+export function task(taskName) {
     return `
     <tr>
         <td>
             <input type="checkbox" name="test">
         </td>
-        <td id="userID">Lorem ipsum dolor sit amet.</td>
+        <td id="userID">${taskName}</td>
         <td>
             <div class="task-buttons">
                 <img class="img-fluid" src="img/move_inner.png"

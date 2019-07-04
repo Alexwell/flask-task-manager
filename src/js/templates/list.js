@@ -1,4 +1,4 @@
-export function list() {
+export function list(listId,listName) {
     return `
     <div class="list" id="listDefault">
     <div class="container">
@@ -16,22 +16,13 @@ export function list() {
                                 </td>
 
                                 <td id="listName">
-                                    <div id="name"></div>
-                                    <div class="input-group" id="editListGroup">
-                                        <input type="text" class="form-control list-add-placeholder"
-                                               placeholder="Edit list name..."
-                                               aria-label="Rec uname" aria-describedby="button-addon2" id="editListTxt">
+                                    <div id="name">${listName}</div>
 
-                                        <button class="btn btn-outline-secondary btn-add" type="button"
-                                                id="editListBtn">Edit
-                                        </button>
-                                    </div>
-                                </td>
                                 <td>
 
                                     <div class="list-header-buttons">
                                         <img src="img/pencil.png" alt="pencil"
-                                             id="editListLabel" data-list-id="">
+                                             id="editListLabel" data-list-id="${listId}">
                                         <img src="img/del.png" alt="del" id="delListLabel">
                                     </div>
                                 </td>

@@ -178,8 +178,8 @@ def edit_todo_list_label():
 
     list_to_change = List.query.filter_by(id=request.form['todo_list_id']).first()
     if list_to_change:
-        list_to_change.label = request.form['todo_list_name']
         db.session.commit()
+        list_to_change.label = request.form['todo_list_name']
         return jsonify({'edit_todo_list_status': 'success',
                         'new_label': list_to_change.label})
     else:

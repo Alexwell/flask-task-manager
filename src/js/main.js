@@ -4,9 +4,11 @@ import {listsContainer} from "./templates/listsContainer";
 import {list} from "./templates/list";
 import {logout} from "./templates/logout";
 import {button} from "./templates/button";
+import {editList} from "./templates/editList";
 
 
 import validate from 'jquery-validation';
+import {task} from "./templates/task";
 
 
 export function main() {
@@ -49,20 +51,20 @@ export function main() {
 
 
         $(document).on('click', '#editListLabel', function () {
-
-            $(this).parentsUntil('thead').find('div#name').hide();
-            $(this).parentsUntil('thead').find('div#editListGroup').show();
-
+            $(this).parentsUntil('thead').find('#name').html(editList());
         });
 
 
         $(document).on('click', '#editListBtn', function () {
-            let listId = $(this).data('list-id'),
-                listName = $(this).prev().val(),  //TODO change prev()
-                hideElement = $(this).parent();
-            console.log(listName);
+            // listId = $(this).data('list-id')
 
-            editTODOListLabelRequest(listId, listName, hideElement);
+
+            let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
+                listName = $(this).prev().val(),  //TODO change prev()
+                change = $(this).parentsUntil('thead').find('#name');
+            console.log(listId, listName);
+
+            editTODOListLabelRequest(listId, listName, change);
         });
 
         $(document).on('click', '#delListLabel', function () {
@@ -176,18 +178,15 @@ export function main() {
         }
 
 
-        function editTODOListLabelRequest(listId, listName, toHideContent) {
+        function editTODOListLabelRequest(listId, listName, change) {
             $.post(_routeAjax('editTODOListLabel'), {
                 todo_list_id: listId,
                 todo_list_name: listName
             }).done(function (response) {
                 console.log(response['edit_todo_list_status']);
                 if (response['edit_todo_list_status'] === 'success') {
-                    toHideContent.hide();
-                    toHideContent.prev().text(response['new_label']);
-                    toHideContent.prev().show();
+                    change.text(response['new_label'])
                 }
-
             }).fail(function () {
                 console.log('List edit failed');
             });
@@ -212,23 +211,19 @@ export function main() {
 
 
         function showAfterLogin(userData) {
-            // for (let i in userData) {
-            //     console.log(i + '===>' + userData[i].label)
-            // }
-
             console.log(userData);
-
             $('#userLogout').html(logout());
-            $('main').html(listsContainer());
-            $('main').append(button());
-
-
-            for (let i in userData) {
-                $('#listContainer').append(list());
+            $('main').html(listsContainer()).append(button());
+            if (userData.length > 0) {
+                for (let i in userData) {
+                    $('#listContainer').append(list(userData[i].id, userData[i].label));
+                    if (userData[i].tasks.length > 0) {
+                        for (let j = 0; j < userData[i].tasks.length; j++) {
+                            $('#listContainer tbody').append(task(userData[i].tasks[j].name));
+                        }
+                    }
+                }
             }
-
-
-            // $('#listDefault, #addTODOList, #userLogout').show('slow');
         }
 
         function hideAfterLogin() {

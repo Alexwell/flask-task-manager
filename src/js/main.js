@@ -160,7 +160,7 @@ export function main() {
                 // $('#addTaskBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
                 // addTODOList();
-                  $('#listsContainer').append(list(response['current_list_id'], response['current_user_email']));
+                $('#listsContainer').append(list(response['current_list_id'], response['current_user_email']));
             }).fail(function () {
                 console.log('No addTODOList response')
             })
@@ -218,7 +218,7 @@ export function main() {
                     $('#listContainer').append(list(userData[i].id, userData[i].label));
                     if (userData[i].tasks.length > 0) {
                         for (let j = 0; j < userData[i].tasks.length; j++) {
-                            $('#listContainer tbody').append(task(userData[i].tasks[j].name));
+                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].name));
                         }
                     }
                 }

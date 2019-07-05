@@ -42,6 +42,7 @@ class List(db.Model):
 
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    priority = db.Column(db.Integer, default=0)
     name = db.Column(db.String(350))
     del_status = db.Column(db.Boolean, default=False)
     done_status = db.Column(db.Boolean, default=False)
@@ -52,6 +53,7 @@ class Tasks(db.Model):
 
     def to_json(self):
         return {'id': self.id,
+                'priority': self.priority,
                 'name': self.name,
                 'done_status': self.done_status
                 }

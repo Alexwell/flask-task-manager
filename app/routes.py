@@ -98,7 +98,7 @@ def login():
             print(i.id)
             lists_json.append(i.to_json())
             # lists_json.append(_test_tasks1)
-            tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).all()
+            tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).order_by(Tasks.priority).all()
             tasks_json = []
             for j in tasks:
                 tasks_json.append((j.to_json()))
@@ -193,6 +193,8 @@ def add_task():
         print(i, '===> ', request.form[i])
     task = Tasks(name=request.form['task_list_label'], list_id=request.form['task_list_id'])
     db.session.add(task)
+    db.session.commit()
+    task.priority = task.id
     db.session.commit()
 
     return jsonify({'add_task_response_status': 'success',

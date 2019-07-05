@@ -44,7 +44,7 @@ export function list(listId,listName) {
                                 </td>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbody${listId}">
                             </tbody>
                         </table>
                     </div>

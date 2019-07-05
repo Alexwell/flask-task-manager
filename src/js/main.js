@@ -218,7 +218,7 @@ export function main() {
                     $('#listContainer').append(list(userData[i].id, userData[i].label));
                     if (userData[i].tasks.length > 0) {
                         for (let j = 0; j < userData[i].tasks.length; j++) {
-                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].name));
+                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].priority, userData[i].tasks[j].name));
                         }
                     }
                 }

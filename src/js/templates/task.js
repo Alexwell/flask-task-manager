@@ -1,6 +1,6 @@
-export function task(taskName) {
+export function task(taskPriority, taskName) {
     return `
-    <tr>
+    <tr data-list-priority ="${taskPriority}">
         <td>
             <input type="checkbox" name="test">
         </td>

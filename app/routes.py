@@ -199,3 +199,11 @@ def add_task():
 
     return jsonify({'add_task_response_status': 'success',
                     'task_label': request.form['task_list_label']})
+
+
+@app.route(ajax_route('moveTaskUp'), methods=['POST'])
+@login_required
+def move_task_up():
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+

@@ -61,14 +61,15 @@ export function main() {
 
         $(document).on('click', '#editListBtn', function () {
             let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
-                listName = $(this).parentsUntil('thead').find('#editListTxt').val(),
-                change = $(this).parentsUntil('thead').find('#name');
+                // listName = $(this).parentsUntil('thead').find('#editListTxt').val(),
+                listName = $(this).prev('#editListTxt').val(),
+                change = $(this).parent();
             console.log(listId, listName);
             editTODOListLabelRequest(listId, listName, change);
         });
 
         $(document).on('click', '#delListLabel', function () {
-            let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
+            let listId = $(this).data('list-id'),
                 delElement = $(this).parentsUntil('#listDefault');
             delTODOListRequest(listId, delElement);
 
@@ -78,8 +79,9 @@ export function main() {
         $(document).on('click', '#addTaskBtn', function () {
 
             let listId = $(this).data('list-id'),
-                taskLabel = $(this).prev().val(); //TODO change prev()
+                taskLabel = $(this).parentsUntil('thead').find('#editTaskTxt').val();
             // hideElement = $(this).parent();
+            console.log(listId, taskLabel);
             addTask(listId, taskLabel)
 
         });

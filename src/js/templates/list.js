@@ -1,7 +1,7 @@
 export function list(listId,listName) {
     return `
     <div class="list" id="listDefault">
-    <div class="container">
+    <div class="container" id="listId" data-list-id="${listId}">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="list-main-block">
@@ -23,7 +23,7 @@ export function list(listId,listName) {
                                     <div class="list-header-buttons">
                                         <img src="img/pencil.png" alt="pencil"
                                              id="editListLabel" data-list-id="${listId}">
-                                        <img src="img/del.png" alt="del" id="delListLabel">
+                                        <img src="img/del.png" alt="del" id="delListLabel" data-list-id="${listId}">
                                     </div>
                                 </td>
                             </tr>
@@ -37,7 +37,7 @@ export function list(listId,listName) {
                                                placeholder="Start typing here to create a task..."
                                                aria-label="Rec uname" aria-describedby="button-addon2" id="editTaskTxt">
                                         <button class="btn btn-outline-secondary btn-add" type="button"
-                                                id="addTaskBtn">Add
+                                                id="addTaskBtn" data-list-id="${listId}">Add
                                             Task
                                         </button>
                                     </div>

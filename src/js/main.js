@@ -45,9 +45,6 @@ export function main() {
             logoutRequest()
         });
 
-        // $('#addTODOList').click(function () {
-        //     addTODOListRequest();
-        // });
 
         $(document).on('click', '#taskUp', function () {
             console.log('Up!!!')
@@ -166,7 +163,7 @@ export function main() {
                 // $('#addTaskBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
                 // addTODOList();
-                $('#listsContainer').append(list(response['current_list_id'], response['current_user_email']));
+                $('#listContainer').append(list(response['current_list_id'], response['current_user_email']));
             }).fail(function () {
                 console.log('No addTODOList response')
             })
@@ -251,20 +248,7 @@ export function main() {
             $('#registration').hide();
         }
 
-        // let listCounter = 1;
 
-
-        function addTODOList() {
-            // $('.list').css('visibility','visible');
-            // $('#addTask').attr('id', 'addTask' + listCounter);
-            // $('#listName').text(listCounter);
-            $('#listsContainer').append(list('Default list name'));
-            // $('#listsContainer>#listDefault').attr('id', 'listDefault' + listCounter);
-            // $('#listsContainer #addTask').attr('id', 'listDefault' + listCounter);
-
-            // listCounter++;
-            // addTODOListRequest();
-        }
 
 
         $('#loginForm').validate({

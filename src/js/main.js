@@ -61,17 +61,21 @@ export function main() {
 
 
         $(document).on('click', '#editListLabel', function () {
-            $(this).parentsUntil('thead').find('#name').html(editList());
+            $(this).parentsUntil('thead').find('#name').html(editList($(this).data('list-id')));
         });
 
 
         $(document).on('click', '#editListBtn', function () {
-            let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
-                // listName = $(this).parentsUntil('thead').find('#editListTxt').val(),
-                listName = $(this).prev('#editListTxt').val(),
-                change = $(this).parent();
-            console.log(listId, listName);
-            editTODOListLabelRequest(listId, listName, change);
+            // let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
+            //     listName = $(this).prev('#editListTxt').val(),
+            //     change = $(this).parent();
+            let form = $(this).parent();
+            console.log(form);
+            // editTODOListLabelRequest(listId, listName, change);
+
+            editListValidate(form)
+
+
         });
 
         $(document).on('click', '#delListLabel', function () {
@@ -181,14 +185,14 @@ export function main() {
             })
         }
 
-        function editTODOListLabelRequest(listId, listName, change) {
+        function editTODOListLabelRequest(form) {
             $.post(_routeAjax('editTODOListLabel'), {
-                todo_list_id: listId,
-                todo_list_name: listName
+                todo_list_id: form.data('list-id'),
+                todo_list_name: form.children('#editListTxt').val()
             }).done(function (response) {
                 console.log(response['edit_todo_list_status']);
                 if (response['edit_todo_list_status'] === 'success') {
-                    change.text(response['new_label'])
+                    form.text(response['new_label'])
                 }
             }).fail(function () {
                 console.log('List edit failed');
@@ -247,8 +251,6 @@ export function main() {
         function hideRegistration() {
             $('#registration').hide();
         }
-
-
 
 
         $('#loginForm').validate({
@@ -314,6 +316,23 @@ export function main() {
                 },
                 submitHandler: function () {
                     addTask(form);
+                }
+            });
+
+        }
+
+
+        function editListValidate(form) {
+
+            $(form).validate({
+                rules: {
+                    list_label: {
+                        required: true,
+                        maxlength: _validateMaxLength
+                    }
+                },
+                submitHandler: function () {
+                    editTODOListLabelRequest(form);
                 }
             });
 

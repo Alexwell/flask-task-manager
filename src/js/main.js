@@ -66,16 +66,7 @@ export function main() {
 
 
         $(document).on('click', '#editListBtn', function () {
-            // let listId = $(this).parentsUntil('thead').find('#editListLabel').data('list-id'),
-            //     listName = $(this).prev('#editListTxt').val(),
-            //     change = $(this).parent();
-            let form = $(this).parent();
-            console.log(form);
-            // editTODOListLabelRequest(listId, listName, change);
-
-            editListValidate(form)
-
-
+            editListValidate($(this).parent())
         });
 
         $(document).on('click', '#delListLabel', function () {
@@ -87,10 +78,7 @@ export function main() {
 
 
         $(document).on('click', '#addTaskBtn', function () {
-            let form = $(this).parentsUntil('tr').find('#editTaskGroup');
-            console.log(form);
-            addTaskValidate(form);
-            // addTask(listId, taskLabel)
+            addTaskValidate( $(this).parent());
         });
 
 

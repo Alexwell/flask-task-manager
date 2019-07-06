@@ -78,7 +78,7 @@ export function main() {
 
 
         $(document).on('click', '#addTaskBtn', function () {
-            addTaskValidate( $(this).parent());
+            addTaskValidate($(this).parent());
         });
 
 
@@ -148,13 +148,7 @@ export function main() {
 
         function addTODOListRequest() {
             $.post(_routeAjax('addTODOList'), {}).done(function (response) {
-                // $('#listName').text(response['current_user_email'] + ' new task!');
-                // $('#editListLabel').attr('data-list-id', (response['current_list_id']));
-                // $('#delListLabel').attr('data-list-id', (response['current_list_id']));
-                // $('#editListBtn').attr('data-list-id', (response['current_list_id']));
-                // $('#addTaskBtn').attr('data-list-id', (response['current_list_id']));
                 console.log(response);
-                // addTODOList();
                 $('#listContainer').append(list(response['current_list_id'], response['current_user_email']));
             }).fail(function () {
                 console.log('No addTODOList response')
@@ -178,10 +172,15 @@ export function main() {
                 todo_list_id: form.data('list-id'),
                 todo_list_name: form.children('#editListTxt').val()
             }).done(function (response) {
-                console.log(response['edit_todo_list_status']);
+                console.log(response);
+
+
                 if (response['edit_todo_list_status'] === 'success') {
                     form.text(response['new_label'])
+                } else {
+                    showValidationErrors(response, form);
                 }
+
             }).fail(function () {
                 console.log('List edit failed');
             });
@@ -219,6 +218,23 @@ export function main() {
                 }
             }
         }
+
+        function showValidationErrors(response, form) {
+            console.log(response, form);
+            let errorMsg = '';
+            for (let i in response) {
+                if (response[i].length > 0) {
+                    for (let j = 0; j < response[i].length; j++) {
+                        errorMsg += response[i][j] + ' ';
+                    }
+                }
+            }
+            console.log(errorMsg);
+            form.children('#editListError').text(errorMsg);
+            form.children('#editListError').addClass('label-error');
+
+        }
+
 
         function hideAfterLogin() {
             $('#listsContainer, #addTODOList, #userLogout').hide();

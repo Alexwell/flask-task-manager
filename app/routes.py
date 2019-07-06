@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from flask import render_template, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import User, List, Tasks
-from app.forms import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm, EditListForm
 
 
 def ajax_route(route):
@@ -52,34 +51,6 @@ def registration():
 
 @app.route(ajax_route('login'), methods=['POST'])
 def login():
-    _test_tasks1 = [{'task_id': 777,
-                     'task_label': 'test task label 1 !!',
-                     'task_status': False,
-                     },
-                    {'task_id': 888,
-                     'task_label': 'test task label 2!!',
-                     'task_status': True,
-                     },
-                    {'task_id': 555,
-                     'task_label': 'test task label 3!!',
-                     'task_status': False,
-                     }
-                    ]
-
-    _test_tasks2 = [{'task_id': 222,
-                     'task_label': 'test task label 3.1!!',
-                     'task_status': False,
-                     },
-                    {'task_id': 444,
-                     'task_label': 'test task label 4!!',
-                     'task_status': True,
-                     },
-                    {'task_id': 999,
-                     'task_label': 'test task label 5 !!',
-                     'task_status': True,
-                     }
-                    ]
-
     if current_user.is_authenticated:
         return jsonify({'login_test': 'user_already signed in!'})
     form = LoginForm(request.form)
@@ -97,7 +68,6 @@ def login():
         for i in lists:
             print(i.id)
             lists_json.append(i.to_json())
-            # lists_json.append(_test_tasks1)
             tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).order_by(Tasks.priority).all()
             tasks_json = []
             for j in tasks:
@@ -105,26 +75,7 @@ def login():
 
             lists_json[counter]['tasks'] = tasks_json
             counter += 1
-
-        print(lists_json)
-        # print(lists_json[1]['tasks'])
-
-        # lists_id, lists_label, lists_tasks = [], [], []
-        # for i in lists:
-        #     lists_id.append(i.id)
-        #     lists_label.append(i.label)
-        # print(lists_id)
         login_user(user)
-        # return jsonify({'login_response_status': 'login_success',
-        #                 'user_data': {
-        #                     'user_email': user.email,
-        #                     'user_id': user.id,
-        #                     'user_lists': {'lists_id': lists_id,
-        #                                    'lists_label': lists_label,
-        #                                    # 'lists_tasks': lists_tasks,
-        #                                    }
-        #                 }
-        #                 })
         print(lists_json)
         return jsonify({'login_response_status': 'login_success',
                         'user_lists': lists_json})
@@ -176,14 +127,23 @@ def edit_todo_list_label():
     for i in request.form:
         print(i, '===> ', request.form[i])
 
-    list_to_change = List.query.filter_by(id=request.form['todo_list_id']).first()
-    if list_to_change:
-        list_to_change.label = request.form['todo_list_name']
-        db.session.commit()
-        return jsonify({'edit_todo_list_status': 'success',
-                        'new_label': list_to_change.label})
+    form = EditListForm(request.form)
+
+    if form.validate():
+        list_to_change = List.query.filter_by(id=request.form['todo_list_id']).first()
+        if list_to_change:
+            list_to_change.label = request.form['todo_list_name']
+            db.session.commit()
+            return jsonify({'edit_todo_list_status': 'success',
+                            'new_label': list_to_change.label})
+        else:
+            return jsonify({'edit_todo_list_status': 'wrong list id'})
     else:
-        return jsonify({'edit_todo_list_status': 'wrong list id'})
+        print('===>', form.errors)
+        print('===>', type(form.errors))
+        print('===>', jsonify(form.errors))
+
+        return jsonify(form.errors)
 
 
 @app.route(ajax_route('addTask'), methods=['POST'])
@@ -206,4 +166,3 @@ def add_task():
 def move_task_up():
     for i in request.form:
         print(i, '===> ', request.form[i])
-

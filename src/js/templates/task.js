@@ -7,6 +7,10 @@ export function task(taskPriority, taskName) {
         <td id="userID">${taskName}</td>
         <td>
             <div class="task-buttons">
+                <div class="task-move">
+                    <div class="task-up" id="taskUp"></div>
+                    <div class="task-down" id="taskDown"></div>
+                </div>
                 <img class="img-fluid" src="img/move_inner.png"
                      alt="move">
                 <img class="img-fluid img-mid"

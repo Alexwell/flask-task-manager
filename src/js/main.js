@@ -49,6 +49,15 @@ export function main() {
         //     addTODOListRequest();
         // });
 
+        $(document).on('click', '#taskUp', function () {
+           console.log('Up!!!')
+        });
+
+          $(document).on('click', '#taskDown', function () {
+           console.log('Down!!!')
+        });
+
+
         $(document).on('click', '#addTODOList', function () {
             addTODOListRequest();
         });

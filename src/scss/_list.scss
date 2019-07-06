@@ -71,6 +71,25 @@
 }
 
 .task-buttons {
+
+  .task-move {
+    position: absolute;
+    margin-left: 8px;
+
+    .task-up {
+      width: 20px;
+      height: 10px;
+      //background-color: #d5ff22;
+    }
+
+    .task-down {
+      width: 20px;
+      height: 10px;
+      //background-color: #ff33d5;
+    }
+  }
+
+
   img {
     box-sizing: content-box;
     width: 12px;

@@ -50,11 +50,11 @@ export function main() {
         // });
 
         $(document).on('click', '#taskUp', function () {
-           console.log('Up!!!')
+            console.log('Up!!!')
         });
 
-          $(document).on('click', '#taskDown', function () {
-           console.log('Down!!!')
+        $(document).on('click', '#taskDown', function () {
+            console.log('Down!!!')
         });
 
 
@@ -86,13 +86,10 @@ export function main() {
 
 
         $(document).on('click', '#addTaskBtn', function () {
-
-            let listId = $(this).data('list-id'),
-                taskLabel = $(this).parentsUntil('thead').find('#editTaskTxt').val();
-            // hideElement = $(this).parent();
-            console.log(listId, taskLabel);
-            addTask(listId, taskLabel)
-
+            let form = $(this).parentsUntil('tr').find('#editTaskGroup');
+            console.log(form);
+            addTaskValidate(form);
+            // addTask(listId, taskLabel)
         });
 
 
@@ -201,10 +198,10 @@ export function main() {
             });
         }
 
-        function addTask(listId, taskLabel) {
+        function addTask(form) {
             $.post(_routeAjax('addTask'), {
-                task_list_id: listId,
-                task_list_label: taskLabel
+                task_list_id: form.data('list-id'),
+                task_list_label: form.children('#editTaskTxt').val()
             }).done(function (response) {
                 console.log(response);
                 if (response['add_task_response_status'] === 'success') {
@@ -289,6 +286,7 @@ export function main() {
             }
         });
 
+
         $('#registrationForm').validate({
             rules: {
                 registration_email: {
@@ -319,6 +317,24 @@ export function main() {
                 registrationRequest();
             }
         });
+
+
+        function addTaskValidate(form) {
+            $(form).validate({
+                rules: {
+                    task_label: {
+                        required: true,
+                        // minlength: _validateMinLength,
+                        maxlength: _validateMaxLength
+                    }
+                },
+                submitHandler: function () {
+                    addTask(form);
+                }
+            });
+
+        }
+
     });
 }
 

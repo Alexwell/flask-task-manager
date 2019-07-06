@@ -1,4 +1,4 @@
-export function list(listId,listName) {
+export function list(listId, listName) {
     return `
     <div class="list" id="listDefault">
     <div class="container" id="listId" data-list-id="${listId}">
@@ -32,15 +32,17 @@ export function list(listId,listName) {
                                     <img src="img/add1.png" alt="add">
                                 </td>
                                 <td colspan="2">
-                                    <div class="input-group" id="editTaskGroup">
+                                    <form class="input-group" id="editTaskGroup" data-list-id="${listId}">
                                         <input type="text" class="form-control list-add-placeholder"
                                                placeholder="Start typing here to create a task..."
-                                               aria-label="Rec uname" aria-describedby="button-addon2" id="editTaskTxt">
-                                        <button class="btn btn-outline-secondary btn-add" type="button"
-                                                id="addTaskBtn" data-list-id="${listId}">Add
+                                               aria-label="Rec uname" aria-describedby="button-addon2" id="editTaskTxt" name="task_label">
+                                                       <label for="editTaskTxt" class="sr-only" id="editTaskError">Task name</label>
+
+                                        <button class="btn btn-outline-secondary btn-add" type="submit"
+                                                id="addTaskBtn">Add
                                             Task
                                         </button>
-                                    </div>
+                                    </form>
                                 </td>
                             </tr>
                             </thead>

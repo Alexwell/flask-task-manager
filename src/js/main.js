@@ -73,7 +73,6 @@ export function main() {
             let listId = $(this).data('list-id'),
                 delElement = $(this).parentsUntil('#listDefault');
             delTODOListRequest(listId, delElement);
-
         });
 
 
@@ -92,6 +91,12 @@ export function main() {
             editTaskValidate($(this).parent())
         });
 
+
+        $(document).on('click', '#delTaskLabel', function () {
+            let taskId = $(this).data('task-id'),
+                delElement = $(this).parentsUntil('tbody');
+            delTaskRequest(taskId, delElement);
+        });
 
         function registrationRequest() {
             $.post(_routeAjax('registration'), {
@@ -186,6 +191,18 @@ export function main() {
                 }
             }).fail(function () {
                 console.log('Fail del')
+            })
+        }
+
+        function delTaskRequest(taskId, delElement) {
+            $.post(_routeAjax('delTask'), {
+                task_id: taskId
+            }).done(function (response) {
+                if (response['remove_task_response_status'] === 'success') {
+                    delElement.remove();
+                }
+            }).fail(function () {
+                console.log('Fail task del')
             })
         }
 

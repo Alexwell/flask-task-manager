@@ -186,8 +186,26 @@ def edit_task_label():
         print('===>', form.errors)
         return jsonify(form.errors)
 
-    @app.route(ajax_route('moveTaskUp'), methods=['POST'])
-    @login_required
-    def move_task_up():
-        for i in request.form:
-            print(i, '===> ', request.form[i])
+
+@app.route(ajax_route('delTask'), methods=['POST'])
+@login_required
+def del_task():
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+    task_to_del = Tasks.query.filter_by(id=request.form['task_id']).first()
+    print(task_to_del)
+    if task_to_del:
+        print(task_to_del.del_status)
+        task_to_del.del_status = True
+        print(task_to_del.del_status)
+        db.session.commit()
+        return jsonify({'remove_task_response_status': 'success'})
+    else:
+        return jsonify({'remove_task_response_status': 'remove_list_failed'})
+
+
+@app.route(ajax_route('moveTaskUp'), methods=['POST'])
+@login_required
+def move_task_up():
+    for i in request.form:
+        print(i, '===> ', request.form[i])

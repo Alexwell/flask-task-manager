@@ -157,8 +157,12 @@ def add_task():
     task.priority = task.id
     db.session.commit()
 
+    print(task.id, task.priority, task.name)
     return jsonify({'add_task_response_status': 'success',
-                    'task_label': request.form['task_list_label']})
+                    'task_id': task.id,
+                    'task_priority': task.priority,
+                    'task_name': task.name
+                    })
 
 
 @app.route(ajax_route('editTaskLabel'), methods=['POST'])
@@ -182,9 +186,8 @@ def edit_task_label():
         print('===>', form.errors)
         return jsonify(form.errors)
 
-
-@app.route(ajax_route('moveTaskUp'), methods=['POST'])
-@login_required
-def move_task_up():
-    for i in request.form:
-        print(i, '===> ', request.form[i])
+    @app.route(ajax_route('moveTaskUp'), methods=['POST'])
+    @login_required
+    def move_task_up():
+        for i in request.form:
+            print(i, '===> ', request.form[i])

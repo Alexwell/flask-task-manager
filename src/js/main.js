@@ -176,6 +176,7 @@ export function main() {
             })
         }
 
+
         function delTODOListRequest(listId, delElement) {
             $.post(_routeAjax('delTODOList'), {
                 list_id: listId
@@ -212,9 +213,7 @@ export function main() {
             }).done(function (response) {
                 console.log(response);
                 if (response['add_task_response_status'] === 'success') {
-                    // toHideContent.hide();
-                    // toHideContent.prev().text(response['new_label']);
-                    // toHideContent.prev().show();
+                    form.parents('table').find('tbody').append(task(response['task_id'], response['task_priority'], response['task_name']))
                 }
             }).fail(function () {
                 console.log('No addTask response')

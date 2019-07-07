@@ -222,3 +222,22 @@ def move_task():
                         'new_other_task_priority': other_task.priority})
     else:
         return jsonify({'move_task_up_response_': 'move_task_up_failed'})
+
+
+@app.route(ajax_route('taskStatusChange'), methods=['POST'])
+@login_required
+def task_status_change():
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+
+    task = Tasks.query.filter_by(id=request.form['task_id']).first()
+
+    if task:
+        if task.done_status:
+            task.done_status = False
+        else:
+            task.done_status = True
+        db.session.commit()
+        return jsonify({'task_status_change_response_': 'success'})
+    else:
+        return jsonify({'task_status_change_response_': 'task_status_change_failed'})

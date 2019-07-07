@@ -1,8 +1,10 @@
-export function task(taskId, taskPriority, taskName) {
+export function task(taskId, taskPriority, taskName, doneStatus) {
+    if(doneStatus) doneStatus='checked';
+    else doneStatus = '';
     return `
     <tr data-list-priority ="${taskPriority}">
         <td>
-            <input type="checkbox" name="test">
+            <input type="checkbox" name="test" id="taskStatus" data-task-id="${taskId}" ${doneStatus}>
         </td>
         <td id="userID">${taskName}</td>
         <td>

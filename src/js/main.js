@@ -112,6 +112,23 @@ export function main() {
         });
 
 
+        $(document).on('change', '#taskStatus', function () {
+            taskStatusChangeRequest($(this).data('task-id'));
+        });
+
+
+        function taskStatusChangeRequest(taskId) {
+            $.post(_routeAjax('taskStatusChange'), {
+                task_id: taskId
+            }).done(function (response) {
+                console.log(response)
+            }).fail(function () {
+                console.log('No task status change response')
+            })
+
+        }
+
+
         function registrationRequest() {
             $.post(_routeAjax('registration'), {
                 registration_email: $('#registrationEmail').val(),
@@ -235,7 +252,7 @@ export function main() {
             }).done(function (response) {
                 console.log(response);
                 if (response['add_task_response_status'] === 'success') {
-                    form.parents('table').find('tbody').append(task(response['task_id'], response['task_priority'], response['task_name']))
+                    form.parents('table').find('tbody').append(task(response['task_id'], response['task_priority'], response['task_name'], false))
                 }
             }).fail(function () {
                 console.log('No addTask response')
@@ -300,7 +317,7 @@ export function main() {
                     $('#listContainer').append(list(userData[i].id, userData[i].label));
                     if (userData[i].tasks.length > 0) {
                         for (let j = 0; j < userData[i].tasks.length; j++) {
-                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].id, userData[i].tasks[j].priority, userData[i].tasks[j].name));
+                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].id, userData[i].tasks[j].priority, userData[i].tasks[j].name, userData[i].tasks[j].done_status));
                         }
                     }
                 }

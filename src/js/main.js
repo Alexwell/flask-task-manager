@@ -108,23 +108,33 @@ export function main() {
                 login_email: $('#loginEmail').val(),
                 login_password: $('#loginPassword').val(),
             }).done(function (response) {
-                if (response['login_response_status'] === 'wrong_login') {
-                    console.log("wrong login");
-                    $('#loginEmailError').addClass('label-error');
-                    $('#loginEmailError').text('Wrong email')
-                }
+                // if (response['login_response_status'] === 'wrong_login') {
+                //     console.log("wrong login");
+                //     $('#loginEmailError').addClass('label-error');
+                //     $('#loginEmailError').text('Wrong email')
+                // }
                 if (response['login_response_status'] === 'wrong_password') {
                     console.log("wrong password");
                     $('#loginPasswordError').addClass('label-error');
                     $('#loginPasswordError').text('Wrong password')
-                }
-                if (response['login_response_status'] === 'login_success') {
+                } else if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     console.log('===>', response);
                     // hideLogin();
                     showAfterLogin(response['user_lists']);
                 } else {
-                    console.log(response['login_response_status']);
+                    console.log(response);
+                    let errorMsg = '';
+                    for (let i in response) {
+                        if (response[i].length > 0) {
+                            for (let j = 0; j < response[i].length; j++) {
+                                errorMsg += response[i][j] + ' ';
+                            }
+                        }
+                    }
+                    console.log(errorMsg);
+                    $('#loginEmailError').addClass('label-error');
+                    $('#loginEmailError').text(errorMsg)
                 }
             }).fail(function () {
                 console.log('No login response');

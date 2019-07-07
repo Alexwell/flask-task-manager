@@ -56,8 +56,8 @@ def login():
     form = LoginForm(request.form)
     if form.validate():
         user = User.query.filter_by(email=form.login_email.data).first()
-        if user is None:
-            return jsonify({'login_response_status': 'wrong_login'})
+        # if user is None:
+        #     return jsonify({'login_response_status': 'wrong_login'})
         if not user.check_password(form.login_password.data):
             return jsonify({'login_response_status': 'wrong_password'})
 
@@ -80,7 +80,9 @@ def login():
         return jsonify({'login_response_status': 'login_success',
                         'user_lists': lists_json})
 
-    return jsonify({'login_test': 'Not logged'})
+    else:
+        print('===>', form.errors)
+        return jsonify(form.errors)
 
 
 @app.route(ajax_route('logout'), methods=['POST'])
@@ -140,8 +142,6 @@ def edit_todo_list_label():
             return jsonify({'edit_todo_list_status': 'wrong list id'})
     else:
         print('===>', form.errors)
-        print('===>', type(form.errors))
-        print('===>', jsonify(form.errors))
 
         return jsonify(form.errors)
 

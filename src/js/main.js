@@ -91,14 +91,19 @@ export function main() {
 
 
         $(document).on('click', '#taskUp', function () {
-            console.log('Up!!!');
             let currentTask = $(this).parents('tr'),
                 otherTask = currentTask.prev('tr');
             if (otherTask.data('list-priority') !== undefined) {
-                console.log(currentTask);
-                console.log(otherTask);
-                moveUpRequest(currentTask, otherTask);
-            } else console.log('Upper task!')
+                moveRequest(currentTask, otherTask, 'up');
+            } else console.log('No upper task!')
+        });
+
+        $(document).on('click', '#taskDown', function () {
+            let currentTask = $(this).parents('tr'),
+                otherTask = currentTask.next('tr');
+            if (otherTask.data('list-priority') !== undefined) {
+                moveRequest(currentTask, otherTask, 'down');
+            } else console.log('No upper task!')
         });
 
 
@@ -269,22 +274,15 @@ export function main() {
             })
         }
 
-        function moveUpRequest(currentTask, otherTask) {
-            $.post(_routeAjax('moveTaskUp'), {
+        function moveRequest(currentTask, otherTask, direction = 'up') {
+            $.post(_routeAjax('moveTask'), {
                 current_task_priority: currentTask.data('list-priority'),
                 other_task_priority: otherTask.data('list-priority'),
             }).done(function (response) {
                 console.log(response);
                 if (response['move_task_up_response'] === 'success') {
-
-                    // currentTask.data('list-priority', response['new_current_task_priority']);
-                    //
-                    // otherTask.data('list-priority', response['new_other_task_priority']);
-
-                    // currentTask.html(otherTask.html())
-                    otherTask.before(currentTask);
-
-
+                    if (direction === 'up') otherTask.before(currentTask);
+                    if (direction === 'down') otherTask.after(currentTask);
                 } else {
                     console.log(response)
                 }

@@ -204,9 +204,9 @@ def del_task():
         return jsonify({'remove_task_response_status': 'remove_list_failed'})
 
 
-@app.route(ajax_route('moveTaskUp'), methods=['POST'])
+@app.route(ajax_route('moveTask'), methods=['POST'])
 @login_required
-def move_task_up():
+def move_task():
     for i in request.form:
         print(i, '===> ', request.form[i])
 

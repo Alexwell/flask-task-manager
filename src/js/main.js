@@ -82,6 +82,17 @@ export function main() {
         });
 
 
+        $(document).on('click', '#editTaskLabel', function () {
+
+            $(this).parents('tr').find('#userID').html(editList($(this).data('task-id'), 'task'));
+        });
+
+
+        $(document).on('click', '#editTaskBtn', function () {
+            editTaskValidate($(this).parent())
+        });
+
+
         function registrationRequest() {
             $.post(_routeAjax('registration'), {
                 registration_email: $('#registrationEmail').val(),
@@ -183,8 +194,6 @@ export function main() {
                 todo_list_name: form.children('#editListTxt').val()
             }).done(function (response) {
                 console.log(response);
-
-
                 if (response['edit_todo_list_status'] === 'success') {
                     form.text(response['new_label'])
                 } else {
@@ -212,6 +221,23 @@ export function main() {
             })
         }
 
+        function editTaskLabelRequest(form) {
+            $.post(_routeAjax('editTaskLabel'), {
+                task_id: form.data('list-id'),
+                task_name: form.children('#editListTxt').val()
+            }).done(function (response) {
+                console.log(response);
+                if (response['edit_task_status'] === 'success') {
+                    form.text(response['new_task_label'])
+                } else {
+                    showValidationErrors(response, form);
+                }
+
+            }).fail(function () {
+                console.log('List edit failed');
+            });
+        }
+
 
         function showAfterLogin(userData) {
             console.log(userData);
@@ -222,7 +248,7 @@ export function main() {
                     $('#listContainer').append(list(userData[i].id, userData[i].label));
                     if (userData[i].tasks.length > 0) {
                         for (let j = 0; j < userData[i].tasks.length; j++) {
-                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].priority, userData[i].tasks[j].name));
+                            $(`#tbody${userData[i].id}`).append(task(userData[i].tasks[j].id, userData[i].tasks[j].priority, userData[i].tasks[j].name));
                         }
                     }
                 }
@@ -337,7 +363,6 @@ export function main() {
 
 
         function editListValidate(form) {
-
             $(form).validate({
                 rules: {
                     list_label: {
@@ -350,6 +375,20 @@ export function main() {
                 }
             });
 
+        }
+
+        function editTaskValidate(form) {
+            $(form).validate({
+                rules: {
+                    list_label: {
+                        required: true,
+                        maxlength: _validateMaxLength
+                    }
+                },
+                submitHandler: function () {
+                    editTaskLabelRequest(form);
+                }
+            });
         }
 
     });

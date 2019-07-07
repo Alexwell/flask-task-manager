@@ -1,4 +1,4 @@
-export function task(taskPriority, taskName) {
+export function task(taskId, taskPriority, taskName) {
     return `
     <tr data-list-priority ="${taskPriority}">
         <td>
@@ -14,10 +14,10 @@ export function task(taskPriority, taskName) {
                 <img class="img-fluid" src="img/move_inner.png"
                      alt="move">
                 <img class="img-fluid img-mid"
-                     src="img/del_inner.png" alt="del">
+                     src="img/del_inner.png" alt="del" >
                 <img class="img-fluid"
                      src="img/pencil_inner.png"
-                     alt="pencil">
+                     alt="pencil" id="editTaskLabel" data-task-id="${taskId}">
             </div>
         </td>
     </tr>

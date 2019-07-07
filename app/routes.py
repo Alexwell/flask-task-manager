@@ -3,7 +3,7 @@ from flask import render_template, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import User, List, Tasks
-from app.forms import RegistrationForm, LoginForm, EditListForm
+from app.forms import RegistrationForm, LoginForm, EditListForm, EditTaskForm
 
 
 def ajax_route(route):
@@ -51,8 +51,8 @@ def registration():
 
 @app.route(ajax_route('login'), methods=['POST'])
 def login():
-    if current_user.is_authenticated:
-        return jsonify({'login_test': 'user_already signed in!'})
+    # if current_user.is_authenticated:
+    #     return jsonify({'login_test': 'user already signed in!'})  # TODO
     form = LoginForm(request.form)
     if form.validate():
         user = User.query.filter_by(email=form.login_email.data).first()
@@ -159,6 +159,28 @@ def add_task():
 
     return jsonify({'add_task_response_status': 'success',
                     'task_label': request.form['task_list_label']})
+
+
+@app.route(ajax_route('editTaskLabel'), methods=['POST'])
+@login_required
+def edit_task_label():
+    for i in request.form:
+        print(i, '===> ', request.form[i])
+
+    form = EditTaskForm(request.form)
+
+    if form.validate():
+        task_to_change = Tasks.query.filter_by(id=request.form['task_id']).first()
+        if task_to_change:
+            task_to_change.name = request.form['task_name']
+            db.session.commit()
+            return jsonify({'edit_task_status': 'success',
+                            'new_task_label': task_to_change.name})
+        else:
+            return jsonify({'edit_todo_list_status': 'wrong task id'})
+    else:
+        print('===>', form.errors)
+        return jsonify(form.errors)
 
 
 @app.route(ajax_route('moveTaskUp'), methods=['POST'])

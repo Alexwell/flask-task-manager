@@ -33,3 +33,7 @@ class LoginForm(FlaskForm):
 
 class EditListForm(FlaskForm):
     todo_list_name = StringField(validators=[DataRequired(), Length(max=10)])
+
+
+class EditTaskForm(FlaskForm):
+    task_name = StringField(validators=[DataRequired(), Length(max=20)])

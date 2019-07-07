@@ -209,3 +209,16 @@ def del_task():
 def move_task_up():
     for i in request.form:
         print(i, '===> ', request.form[i])
+
+    current_task = Tasks.query.filter_by(priority=request.form['current_task_priority']).first()
+    other_task = Tasks.query.filter_by(priority=request.form['other_task_priority']).first()
+    if current_task and other_task:
+        print(current_task.priority, other_task.priority)
+        current_task.priority, other_task.priority = other_task.priority, current_task.priority
+        print(current_task.priority, other_task.priority)
+        db.session.commit()
+        return jsonify({'move_task_up_response': 'success',
+                        'new_current_task_priority': current_task.priority,
+                        'new_other_task_priority': other_task.priority})
+    else:
+        return jsonify({'move_task_up_response_': 'move_task_up_failed'})

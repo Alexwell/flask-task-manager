@@ -46,15 +46,6 @@ export function main() {
         });
 
 
-        $(document).on('click', '#taskUp', function () {
-            console.log('Up!!!')
-        });
-
-        $(document).on('click', '#taskDown', function () {
-            console.log('Down!!!')
-        });
-
-
         $(document).on('click', '#addTODOList', function () {
             addTODOListRequest();
         });
@@ -97,6 +88,24 @@ export function main() {
                 delElement = $(this).parentsUntil('tbody');
             delTaskRequest(taskId, delElement);
         });
+
+
+        $(document).on('click', '#taskUp', function () {
+            console.log('Up!!!');
+            let currentTask = $(this).parents('tr'),
+                otherTask = currentTask.prev('tr');
+            if (otherTask.data('list-priority') !== undefined) {
+                console.log(currentTask);
+                console.log(otherTask);
+                moveUpRequest(currentTask, otherTask);
+            } else console.log('Upper task!')
+        });
+
+
+        $(document).on('click', '#taskDown', function () {
+            console.log('Down!!!')
+        });
+
 
         function registrationRequest() {
             $.post(_routeAjax('registration'), {
@@ -188,23 +197,14 @@ export function main() {
             }).done(function (response) {
                 if (response['remove_list_response_status'] === 'remove_list_success') {
                     delElement.remove();
+                } else {
+                    console.log(response)
                 }
             }).fail(function () {
                 console.log('Fail del')
             })
         }
 
-        function delTaskRequest(taskId, delElement) {
-            $.post(_routeAjax('delTask'), {
-                task_id: taskId
-            }).done(function (response) {
-                if (response['remove_task_response_status'] === 'success') {
-                    delElement.remove();
-                }
-            }).fail(function () {
-                console.log('Fail task del')
-            })
-        }
 
         function editTODOListLabelRequest(form) {
             $.post(_routeAjax('editTODOListLabel'), {
@@ -254,6 +254,44 @@ export function main() {
             });
         }
 
+
+        function delTaskRequest(taskId, delElement) {
+            $.post(_routeAjax('delTask'), {
+                task_id: taskId
+            }).done(function (response) {
+                if (response['remove_task_response_status'] === 'success') {
+                    delElement.remove();
+                } else {
+                    console.log(response)
+                }
+            }).fail(function () {
+                console.log('Fail task del')
+            })
+        }
+
+        function moveUpRequest(currentTask, otherTask) {
+            $.post(_routeAjax('moveTaskUp'), {
+                current_task_priority: currentTask.data('list-priority'),
+                other_task_priority: otherTask.data('list-priority'),
+            }).done(function (response) {
+                console.log(response);
+                if (response['move_task_up_response'] === 'success') {
+
+                    // currentTask.data('list-priority', response['new_current_task_priority']);
+                    //
+                    // otherTask.data('list-priority', response['new_other_task_priority']);
+
+                    // currentTask.html(otherTask.html())
+                    otherTask.before(currentTask);
+
+
+                } else {
+                    console.log(response)
+                }
+            }).fail(function () {
+                console.log('No response move up')
+            })
+        }
 
         function showAfterLogin(userData) {
             console.log(userData);

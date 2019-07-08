@@ -13,6 +13,8 @@ def security_check(form, field):
         raise ValidationError('Use only letters, digits and .- _ @ ')
 
 
+
+
 class RegistrationForm(FlaskForm):
     registration_email = StringField(validators=[DataRequired(), Email(), Length(max=64), security_check])
     registration_password = PasswordField(validators=[DataRequired(), Length(min=3, max=64), security_check])

@@ -83,6 +83,12 @@ export function main() {
         });
 
 
+        $(document).on('focus', '#editListTxt, #editTaskTxt', function () {
+            console.log($(this),'focus');
+            $(this).prev('label').hide()
+        });
+
+
         $(document).on('click', '#delTaskLabel', function () {
             let taskId = $(this).data('task-id'),
                 delElement = $(this).parentsUntil('tbody');
@@ -155,11 +161,6 @@ export function main() {
                 login_email: $('#loginEmail').val(),
                 login_password: $('#loginPassword').val(),
             }).done(function (response) {
-                // if (response['login_response_status'] === 'wrong_login') {
-                //     console.log("wrong login");
-                //     $('#loginEmailError').addClass('label-error');
-                //     $('#loginEmailError').text('Wrong email')
-                // }
                 if (response['login_response_status'] === 'wrong_password') {
                     console.log("wrong password");
                     $('#loginPasswordError').addClass('label-error');
@@ -328,6 +329,7 @@ export function main() {
         }
 
         function showValidationErrors(response, form) {
+            form.children('label').show();
             console.log(response, form);
             let errorMsg = '';
             for (let i in response) {
@@ -422,7 +424,6 @@ export function main() {
                 rules: {
                     task_label: {
                         required: true,
-                        // minlength: _validateMinLength,
                         maxlength: _validateMaxLength
                     }
                 },

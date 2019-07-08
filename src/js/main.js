@@ -247,13 +247,16 @@ export function main() {
 
         function addTask(form) {
             $.post(_routeAjax('addTask'), {
-                task_list_id: form.data('list-id'),
-                task_list_label: form.children('#editTaskTxt').val()
+                task_id: form.data('list-id'),
+                task_name: form.children('#editTaskTxt').val()
             }).done(function (response) {
                 console.log(response);
                 if (response['add_task_response_status'] === 'success') {
                     form.parents('table').find('tbody').append(task(response['task_id'], response['task_priority'], response['task_name'], false))
+                } else {
+                    showValidationErrors(response, form);
                 }
+
             }).fail(function () {
                 console.log('No addTask response')
             })

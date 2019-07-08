@@ -151,18 +151,24 @@ def edit_todo_list_label():
 def add_task():
     for i in request.form:
         print(i, '===> ', request.form[i])
-    task = Tasks(name=request.form['task_list_label'], list_id=request.form['task_list_id'])
-    db.session.add(task)
-    db.session.commit()
-    task.priority = task.id
-    db.session.commit()
 
-    print(task.id, task.priority, task.name)
-    return jsonify({'add_task_response_status': 'success',
-                    'task_id': task.id,
-                    'task_priority': task.priority,
-                    'task_name': task.name
-                    })
+    form = EditTaskForm(request.form)
+    if form.validate():
+        task = Tasks(name=request.form['task_name'], list_id=request.form['task_id'])
+        db.session.add(task)
+        db.session.commit()
+        task.priority = task.id
+        db.session.commit()
+
+        print(task.id, task.priority, task.name)
+        return jsonify({'add_task_response_status': 'success',
+                        'task_id': task.id,
+                        'task_priority': task.priority,
+                        'task_name': task.name
+                        })
+    else:
+        print('===>', form.errors)
+        return jsonify(form.errors)
 
 
 @app.route(ajax_route('editTaskLabel'), methods=['POST'])

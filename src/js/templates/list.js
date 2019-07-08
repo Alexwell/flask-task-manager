@@ -33,10 +33,10 @@ export function list(listId, listName) {
                                 </td>
                                 <td colspan="2">
                                     <form class="input-group" id="editTaskGroup" data-list-id="${listId}">
+                                       <label for="editTaskTxt" class="sr-only" id="editListError">Task name</label>
                                         <input type="text" class="form-control list-add-placeholder"
                                                placeholder="Start typing here to create a task..."
                                                aria-label="Rec uname" aria-describedby="button-addon2" id="editTaskTxt" name="task_label">
-                                                       <label for="editTaskTxt" class="sr-only" id="editTaskError">Task name</label>
 
                                         <button class="btn btn-outline-secondary btn-add" type="submit"
                                                 id="addTaskBtn">Add

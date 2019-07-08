@@ -129,13 +129,11 @@ export function main() {
         });
 
 
-        $(document).on('mouseover', 'tbody tr', function () {
-            console.log("howered!");
+        $(document).on('mouseover', 'tbody tr:last-child', function () {
             $(this).children('td').addClass('hover-js')
         });
 
-         $(document).on('mouseout', 'tbody tr', function () {
-            console.log("howered!");
+         $(document).on('mouseout', 'tbody tr:last-child', function () {
             $(this).children('td').removeClass('hover-js')
         });
 

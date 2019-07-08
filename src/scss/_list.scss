@@ -1,5 +1,4 @@
 .list-container {
-  //display: $display-mode;
   .error {
     margin-bottom: 0;
     padding: 5px;
@@ -8,8 +7,6 @@
 
 .list {
   margin-bottom: 40px;
-  //display: $display-mode;
-  //visibility: hidden;
 
 }
 
@@ -19,7 +16,6 @@
 
 .hover-js {
   background-color: #fcfed5;
-  cursor: pointer;
 }
 
 .label-error {
@@ -183,12 +179,17 @@
     color: #999;
 
     tr {
-      //&:hover {
-      //  background-color: #fcfed5;
-      //  cursor: pointer;
-      //}
+      &:hover {
+        background-color: #fcfed5;
+        cursor: pointer;
+      }
 
       &:last-child {
+        &:hover {
+          background-color: inherit;
+          cursor: pointer;
+        }
+
         td {
           &:last-child {
             border-bottom-right-radius: 12px;

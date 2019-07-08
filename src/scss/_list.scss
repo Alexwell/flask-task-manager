@@ -13,8 +13,13 @@
 
 }
 
-.no-line{
+.no-line {
   white-space: normal;
+}
+
+.hover-js {
+  background-color: #fcfed5;
+  cursor: pointer;
 }
 
 .label-error {
@@ -23,7 +28,7 @@
   position: relative;
   margin-bottom: 0;
   padding: 5px;
-  display:inline-block;
+  display: inline-block;
 }
 
 .list-main-block {
@@ -178,19 +183,19 @@
     color: #999;
 
     tr {
-      &:hover {
-        background-color: #fcfed5;
-        cursor: pointer;
-      }
+      //&:hover {
+      //  background-color: #fcfed5;
+      //  cursor: pointer;
+      //}
 
       &:last-child {
         td {
           &:last-child {
-            border-bottom-right-radius: 20px;
+            border-bottom-right-radius: 12px;
           }
 
           &:first-child {
-            border-bottom-left-radius: 20px;
+            border-bottom-left-radius: 12px;
           }
         }
       }

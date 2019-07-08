@@ -129,6 +129,18 @@ export function main() {
         });
 
 
+        $(document).on('mouseover', 'tbody tr', function () {
+            console.log("howered!");
+            $(this).children('td').addClass('hover-js')
+        });
+
+         $(document).on('mouseout', 'tbody tr', function () {
+            console.log("howered!");
+            $(this).children('td').removeClass('hover-js')
+        });
+
+
+
         function taskStatusChangeRequest(taskId) {
             $.post(_routeAjax('taskStatusChange'), {
                 task_id: taskId

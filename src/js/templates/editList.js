@@ -1,5 +1,4 @@
 export function editList(listId = '1', type = 'list') {
-    console.log('===>', listId, type);
     let btnId = 'editListBtn';
     if (type === 'task') {
         btnId = 'editTaskBtn'

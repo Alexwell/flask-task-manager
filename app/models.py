@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db, login
@@ -23,7 +22,7 @@ class User(UserMixin, db.Model):
 
 class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(50))
+    label = db.Column(db.String(50), default='New list')
     del_status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tasks = db.relationship('Tasks', backref='list', lazy='dynamic')

@@ -6,7 +6,6 @@ import {list} from "./list";
 import {task} from "./task";
 
 export function showAfterLogin(userData) {
-    console.log(userData);
     $('#userLogout').html(logout());
     $('main').html(listsContainer()).append(button());
     if (userData.length > 0) {
@@ -26,7 +25,6 @@ export function showAfterLogin(userData) {
 
 export function showValidationErrors(response, form) {
     form.children('label').show();
-    console.log(response, form);
     let errorMsg = '';
     for (let i in response) {
         if (response.hasOwnProperty(i)) {
@@ -35,7 +33,6 @@ export function showValidationErrors(response, form) {
             }
         }
     }
-    console.log(errorMsg);
     form.children('#editListError').text(errorMsg);
     form.children('#editListError').addClass('label-error');
 

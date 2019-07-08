@@ -34,7 +34,6 @@ class LoginForm(FlaskForm):
             raise ValidationError('Wrong email.')
 
 
-
 class EditListForm(FlaskForm):
     todo_list_name = StringField(validators=[DataRequired(), Length(max=50), security_check])
 

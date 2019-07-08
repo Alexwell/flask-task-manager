@@ -87,7 +87,6 @@ export function main() {
 
 
         $(document).on('focus', '#editListTxt, #editTaskTxt', function () {
-            console.log($(this), 'focus');
             $(this).prev('label').hide()
         });
 
@@ -104,7 +103,7 @@ export function main() {
                 otherTask = currentTask.prev('tr');
             if (otherTask.data('list-priority') !== undefined) {
                 moveRequest(currentTask, otherTask, 'up');
-            } else console.log('No upper task!')
+            }
         });
 
         $(document).on('click', '#taskDown', function () {
@@ -112,7 +111,7 @@ export function main() {
                 otherTask = currentTask.next('tr');
             if (otherTask.data('list-priority') !== undefined) {
                 moveRequest(currentTask, otherTask, 'down');
-            } else console.log('No upper task!')
+            }
         });
 
 

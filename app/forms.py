@@ -7,7 +7,7 @@ from app.models import User
 
 
 def security_check(form, field):
-    pattern = '(^[a-zA-Z.@_-]*)$'
+    pattern = '(^[a-zA-Z0-9.@_-]*)$'
     result = re.match(pattern, field.data)
     if not result:
         raise ValidationError('Use only letters, digits and .- _ @ ')
@@ -18,7 +18,7 @@ def security_check(form, field):
 class RegistrationForm(FlaskForm):
     registration_email = StringField(validators=[DataRequired(), Email(), Length(max=64), security_check])
     registration_password = PasswordField(validators=[DataRequired(), Length(min=3, max=64), security_check])
-    registration_password_confirm = PasswordField(validators=[EqualTo('registration_password'), security_check])
+    registration_password_confirm = PasswordField(validators=[EqualTo('registration_password')])
 
     def validate_registration_email(self, registration_email):
         user = User.query.filter_by(email=registration_email.data).first()
@@ -33,7 +33,7 @@ class LoginForm(FlaskForm):
     def validate_login_email(self, login_email):
         user = User.query.filter_by(email=login_email.data).first()
         if user is None:
-            raise ValidationError('Wrong email')
+            raise ValidationError('Wrong email.')
 
     # def validate_login_password(self, login_password, login_email):
     #     user = User.query.filter_by(email=login_email.data).first()

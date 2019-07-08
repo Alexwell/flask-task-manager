@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import {signIn} from "./templates/signIn";
+import {registration} from "./templates/registration";
+import {registrationSuccess} from "./templates/registrationSuccess";
 import {listsContainer} from "./templates/listsContainer";
 import {list} from "./templates/list";
 import {logout} from "./templates/logout";
@@ -30,19 +32,39 @@ export function main() {
         $('main').html(signIn());
 
 
-        $('#registerNow').click(function () {
-            hideLogin();
-            showRegistration();
-        });
+        // $('#registerNow').click(function () {
+        //     $('main').html(registration());
+        //     // hideLogin();
+        //     // showRegistration();
+        // });
 
-        $('#signInLink').click(function () {
-            hideRegistration();
-            showLogin();
-        });
+        // $('#signInLink').click(function () {
+        //     hideRegistration();
+        //     showLogin();
+        // });
 
 
         $('#userLogout p').click(function () {
             logoutRequest()
+        });
+
+
+        $(document).on('click', '#registerNow', function () {
+            $('main').html(registration());
+        });
+
+        $(document).on('click', '#signInLink', function () {
+            $('main').html(signIn());
+        });
+
+
+        $(document).on('click', '#signIn', function () {
+            loginValidate(($(this).parent()));
+        });
+
+
+        $(document).on('click', '#registrationBtn', function () {
+            registrationValidate($(this).parent());
         });
 
 
@@ -84,7 +106,7 @@ export function main() {
 
 
         $(document).on('focus', '#editListTxt, #editTaskTxt', function () {
-            console.log($(this),'focus');
+            console.log($(this), 'focus');
             $(this).prev('label').hide()
         });
 
@@ -113,11 +135,6 @@ export function main() {
         });
 
 
-        $(document).on('click', '#taskDown', function () {
-            console.log('Down!!!')
-        });
-
-
         $(document).on('change', '#taskStatus', function () {
             taskStatusChangeRequest($(this).data('task-id'));
         });
@@ -135,54 +152,37 @@ export function main() {
         }
 
 
-        function registrationRequest() {
+        function registrationRequest(form) {
             $.post(_routeAjax('registration'), {
-                registration_email: $('#registrationEmail').val(),
-                registration_password: $('#registrationPassword').val(),
-                registration_password_confirm: $('#confirmRegistrationPassword').val()
+                registration_email: form.children('#registrationEmail').val(),
+                registration_password: form.children('#registrationPassword').val(),
+                registration_password_confirm: form.children('#confirmRegistrationPassword').val(),
             }).done(function (response) {
                 console.log(response);
-                if (response['registration_response_status'] === 'email_already_exist') {
-                    console.log("wrong mail");
-                    $('#emailValidationError').addClass('label-error');
-                    $('#emailValidationError').text('Email already exist')
-                }
                 if (response['registration_response_status'] === 'registration_success') {
-                    hideRegistration();
-                    showLogin();
+                    $('main').html(registrationSuccess())
+                    // hideRegistration();
+                    // showLogin();
+                } else {
+                    showValidationErrors(response, form)
                 }
             }).fail(function () {
                 console.log('No registration response')
             })
         }
 
-        function loginRequest() {
+        function loginRequest(form) {
             $.post(_routeAjax('login'), {
-                login_email: $('#loginEmail').val(),
-                login_password: $('#loginPassword').val(),
+                login_email: form.children('#loginEmail').val(),
+                login_password: form.children('#loginPassword').val(),
             }).done(function (response) {
-                if (response['login_response_status'] === 'wrong_password') {
-                    console.log("wrong password");
-                    $('#loginPasswordError').addClass('label-error');
-                    $('#loginPasswordError').text('Wrong password')
-                } else if (response['login_response_status'] === 'login_success') {
+                if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     console.log('===>', response);
                     // hideLogin();
                     showAfterLogin(response['user_lists']);
                 } else {
-                    console.log(response);
-                    let errorMsg = '';
-                    for (let i in response) {
-                        if (response[i].length > 0) {
-                            for (let j = 0; j < response[i].length; j++) {
-                                errorMsg += response[i][j] + ' ';
-                            }
-                        }
-                    }
-                    console.log(errorMsg);
-                    $('#loginEmailError').addClass('label-error');
-                    $('#loginEmailError').text(errorMsg)
+                    showValidationErrors(response, form);
                 }
             }).fail(function () {
                 console.log('No login response');
@@ -328,6 +328,7 @@ export function main() {
             }
         }
 
+
         function showValidationErrors(response, form) {
             form.children('label').show();
             console.log(response, form);
@@ -350,9 +351,9 @@ export function main() {
             $('#listsContainer, #addTODOList, #userLogout').hide();
         }
 
-        function showLogin() {
-            $('#signInContainer').show('slow');
-        }
+        // function showLogin() {
+        //     $('#signInContainer').show('slow');
+        // }
 
         function hideLogin() {
             $('#signInContainer').hide();
@@ -367,56 +368,61 @@ export function main() {
         }
 
 
-        $('#loginForm').validate({
-            rules: {
-                email: {
-                    required: true,
-                    email: true,
-                    maxlength: _validateMaxLength
+        function loginValidate(form) {
+            $(form).validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                        maxlength: _validateMaxLength
+                    },
+                    password: {
+                        required: true,
+                        minlength: _validateMinLength,
+                        maxlength: _validateMaxLength
+                    }
                 },
-                password: {
-                    required: true,
-                    minlength: _validateMinLength,
-                    maxlength: _validateMaxLength
+                // success: 'valid',
+                submitHandler: function () {
+                    loginRequest(form);
                 }
-            },
-            // success: 'valid',
-            submitHandler: function () {
-                loginRequest();
-            }
-        });
+            });
+        }
 
 
-        $('#registrationForm').validate({
-            rules: {
-                registration_email: {
-                    required: true,
-                    email: true,
-                    maxlength: _validateMaxLength
+        function registrationValidate(form) {
+            $(form).validate({
+                rules: {
+                    registration_email: {
+                        required: true,
+                        email: true,
+                        maxlength: _validateMaxLength
+                    },
+                    registration_password: {
+                        required: true,
+                        minlength: _validateMinLength,
+                        maxlength: _validateMaxLength
+                    },
+                    registration_password_confirm: {
+                        equalTo: '#registrationPassword'
+                    }
                 },
-                registration_password: {
-                    required: true,
-                    minlength: _validateMinLength,
-                    maxlength: _validateMaxLength
-                },
-                registration_password_confirm: {
-                    equalTo: '#registrationPassword'
+                // messages: {
+                //     registration_email: {
+                //         required: 'test required',
+                //         email: 'test mail'
+                //     }
+                // },
+                // errorPlacement: function (error, element) {
+                //     $('#errorTxt').append(error)
+                //
+                // },
+                submitHandler: function () {
+                    registrationRequest(form);
                 }
-            },
-            // messages: {
-            //     registration_email: {
-            //         required: 'test required',
-            //         email: 'test mail'
-            //     }
-            // },
-            // errorPlacement: function (error, element) {
-            //     $('#errorTxt').append(error)
-            //
-            // },
-            submitHandler: function () {
-                registrationRequest();
-            }
-        });
+            });
+
+        }
 
 
         function addTaskValidate(form) {

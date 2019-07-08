@@ -5,10 +5,10 @@ export function signIn() {
         <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
         <input type="email" name="email" class="form-control" placeholder="Email address" id="loginEmail" required
                autofocus>
-        <label for="loginEmail" class="sr-only" id="loginEmailError">Email address</label>
+        <label for="loginEmail" class="sr-only no-line" id="loginEmailError">Email address</label>
 
         <input type="password" name="password" class="form-control" placeholder="Password" id="loginPassword" required>
-        <label for="loginPassword" class="sr-only" id="loginPasswordError">Password</label>
+        <label for="loginPassword" class="sr-only no-line" id="editListError">Password</label>
 
         <!--  <div class="checkbox mb-3" id="errorField">
              <label>

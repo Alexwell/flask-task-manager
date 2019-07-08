@@ -37,16 +37,16 @@ def registration():
     form = RegistrationForm(request.form)
     print(form.validate())
     if form.validate():
-        check_user = User.query.filter_by(email=form.registration_email.data).first()
-        if check_user is not None:
-            return jsonify({'registration_response_status': 'email_already_exist'})
+        # check_user = User.query.filter_by(email=form.registration_email.data).first()
+        # if check_user is not None:
+        #     return jsonify({'registration_response_status': 'email_already_exist'})
         user = User(email=form.registration_email.data)
         user.set_password(form.registration_password.data)
         db.session.add(user)
         db.session.commit()
         return jsonify({'registration_response_status': 'registration_success'})
 
-    return jsonify({'response_test': 'Not registered!'})
+    return jsonify(form.errors)
 
 
 @app.route(ajax_route('login'), methods=['POST'])
@@ -59,7 +59,7 @@ def login():
         # if user is None:
         #     return jsonify({'login_response_status': 'wrong_login'})
         if not user.check_password(form.login_password.data):
-            return jsonify({'login_response_status': 'wrong_password'})
+            return jsonify({'login_password':['Wrong password.']})
 
         lists = List.query.filter_by(user_id=user.id, del_status=False).all()
         lists_json = []

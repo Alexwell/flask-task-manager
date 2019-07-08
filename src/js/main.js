@@ -1,4 +1,7 @@
 import $ from 'jquery';
+import validate from 'jquery-validation';
+import {header} from "./templates/header";
+import {footer} from "./templates/footer";
 import {signIn} from "./templates/signIn";
 import {registration} from "./templates/registration";
 import {registrationSuccess} from "./templates/registrationSuccess";
@@ -8,9 +11,6 @@ import {logout} from "./templates/logout";
 import {button} from "./templates/button";
 import {editList} from "./templates/editList";
 import {task} from "./templates/task";
-
-
-import validate from 'jquery-validation';
 
 
 export function main() {
@@ -28,20 +28,9 @@ export function main() {
             }
         }
 
+        $('body').html(header()).append(footer());
 
         $('main').html(signIn());
-
-
-        // $('#registerNow').click(function () {
-        //     $('main').html(registration());
-        //     // hideLogin();
-        //     // showRegistration();
-        // });
-
-        // $('#signInLink').click(function () {
-        //     hideRegistration();
-        //     showLogin();
-        // });
 
 
         $(document).on('click', '#userLogout p', function () {
@@ -161,8 +150,6 @@ export function main() {
                 console.log(response);
                 if (response['registration_response_status'] === 'registration_success') {
                     $('main').html(registrationSuccess())
-                    // hideRegistration();
-                    // showLogin();
                 } else {
                     showValidationErrors(response, form)
                 }
@@ -179,7 +166,6 @@ export function main() {
                 if (response['login_response_status'] === 'login_success') {
                     console.log(response['login_response_status']);
                     console.log('===>', response);
-                    // hideLogin();
                     showAfterLogin(response['user_lists']);
                 } else {
                     showValidationErrors(response, form);
@@ -345,27 +331,6 @@ export function main() {
         }
 
 
-        function hideAfterLogin() {
-            $('#listsContainer, #addTODOList, #userLogout').hide();
-        }
-
-        // function showLogin() {
-        //     $('#signInContainer').show('slow');
-        // }
-
-        function hideLogin() {
-            $('#signInContainer').hide();
-        }
-
-        function showRegistration() {
-            $('#registration').show('slow');
-        }
-
-        function hideRegistration() {
-            $('#registration').hide();
-        }
-
-
         function loginValidate(form) {
             $(form).validate({
                 rules: {
@@ -405,16 +370,6 @@ export function main() {
                         equalTo: '#registrationPassword'
                     }
                 },
-                // messages: {
-                //     registration_email: {
-                //         required: 'test required',
-                //         email: 'test mail'
-                //     }
-                // },
-                // errorPlacement: function (error, element) {
-                //     $('#errorTxt').append(error)
-                //
-                // },
                 submitHandler: function () {
                     registrationRequest(form);
                 }

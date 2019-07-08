@@ -1,26 +1,47 @@
-# $ export FLASK_APP=task_manager.py
-# $ export FLASK_ENV=development
-# $ export FLASK_DEBUG=1
+#Commands
 
-# DB init:
-## $ flask db init 
+Flask:
+```sh
+ $ export FLASK_APP=task_manager.py
+ $ export FLASK_ENV=development
+ $ export FLASK_DEBUG=1
+ ```
 
-# DB migration: 
-## $ flask db migrate -m "name"
-## $ flask db upgrade
+DB initialization:
+```sh
+ $ flask db init 
+```
 
-#mail error reports:
-# local mail server:
-## $ python -m smtpd -n -c DebuggingServer localhost:8025
-## $ export MAIL_SERVER=localhost
-## $ export MAIL_PORT=8025
+ DB migration: 
+```sh 
+$ flask db migrate -m "name"
+$ flask db upgrade
+```
+Mail error reports for local mail server:
+```sh
+$ python -m smtpd -n -c DebuggingServer localhost:8025
+$ export MAIL_SERVER=localhost
+$ export MAIL_PORT=8025
+```
+Mail error reports for gmail:
+```sh
+$ export MAIL_SERVER=smtp.googlemail.com
+$ export MAIL_PORT=587
+$ export MAIL_USE_TLS=1
+$ export MAIL_USERNAME=test_mail@gmail.com
+$ export MAIL_PASSWORD=pAsswoRd
+```
+Run tests:
+```sh
+$ python tests.py
+```
 
-# gmail:
-## $ export MAIL_SERVER=smtp.googlemail.com
-## $ export MAIL_PORT=587
-## $ export MAIL_USE_TLS=1
-## $ export MAIL_USERNAME=test_mail@gmail.com
-## $ export MAIL_PASSWORD=pAsswoRd
+Heroku:
 
-# Run tests:
-## $ python tests.py
+```sh
+$ heroku login
+$ heroku apps:create app-name
+$ heroku addons:add heroku-postgresql:hobby-dev
+$ heroku config:set FLASK_APP=task_manager.py
+$ git push heroku master
+```

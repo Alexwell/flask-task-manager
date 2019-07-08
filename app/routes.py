@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-from app import app, db
+from app import bp, db
 from app.models import User, List, Tasks
 from app.forms import RegistrationForm, LoginForm, EditListForm, EditTaskForm
 
@@ -14,20 +14,13 @@ def ajax_route(route):
         raise TypeError('route is not string')
 
 
-# @app.before_request
-# def before_request():
-#     if current_user.is_authenticated:
-#         current_user.last_seen = datetime.utcnow()
-#         db.session.commit()
-
-
-@app.route('/')
-@app.route('/index')
+@bp.route('/')
+@bp.route('/index')
 def index():
     return render_template('index.html')
 
 
-@app.route(ajax_route('registration'), methods=['POST'])
+@bp.route(ajax_route('registration'), methods=['POST'])
 def registration():
     for k in request.form:
         print(f'{k} ===> {request.form[k]}')
@@ -49,7 +42,7 @@ def registration():
     return jsonify(form.errors)
 
 
-@app.route(ajax_route('login'), methods=['POST'])
+@bp.route(ajax_route('login'), methods=['POST'])
 def login():
     # if current_user.is_authenticated:
     #     return jsonify({'login_test': 'user already signed in!'})  # TODO
@@ -59,7 +52,7 @@ def login():
         # if user is None:
         #     return jsonify({'login_response_status': 'wrong_login'})
         if not user.check_password(form.login_password.data):
-            return jsonify({'login_password':['Wrong password.']})
+            return jsonify({'login_password': ['Wrong password.']})
 
         lists = List.query.filter_by(user_id=user.id, del_status=False).all()
         lists_json = []
@@ -85,13 +78,13 @@ def login():
         return jsonify(form.errors)
 
 
-@app.route(ajax_route('logout'), methods=['POST'])
+@bp.route(ajax_route('logout'), methods=['POST'])
 def logout():
     logout_user()
     return jsonify({'logout_response_status': 'logout_success'})
 
 
-@app.route(ajax_route('addTODOList'), methods=['POST'])
+@bp.route(ajax_route('addTODOList'), methods=['POST'])
 @login_required
 def add_todo_list():
     print(current_user.is_authenticated)
@@ -106,7 +99,7 @@ def add_todo_list():
                     'current_list_id': list_id.id})
 
 
-@app.route(ajax_route('delTODOList'), methods=['POST'])
+@bp.route(ajax_route('delTODOList'), methods=['POST'])
 @login_required
 def del_todo_list():
     for i in request.form:
@@ -123,7 +116,7 @@ def del_todo_list():
         return jsonify({'remove_list_response_status': 'remove_list_failed'})
 
 
-@app.route(ajax_route('editTODOListLabel'), methods=['POST'])
+@bp.route(ajax_route('editTODOListLabel'), methods=['POST'])
 @login_required
 def edit_todo_list_label():
     for i in request.form:
@@ -146,7 +139,7 @@ def edit_todo_list_label():
         return jsonify(form.errors)
 
 
-@app.route(ajax_route('addTask'), methods=['POST'])
+@bp.route(ajax_route('addTask'), methods=['POST'])
 @login_required
 def add_task():
     for i in request.form:
@@ -171,7 +164,7 @@ def add_task():
         return jsonify(form.errors)
 
 
-@app.route(ajax_route('editTaskLabel'), methods=['POST'])
+@bp.route(ajax_route('editTaskLabel'), methods=['POST'])
 @login_required
 def edit_task_label():
     for i in request.form:
@@ -193,7 +186,7 @@ def edit_task_label():
         return jsonify(form.errors)
 
 
-@app.route(ajax_route('delTask'), methods=['POST'])
+@bp.route(ajax_route('delTask'), methods=['POST'])
 @login_required
 def del_task():
     for i in request.form:
@@ -210,7 +203,7 @@ def del_task():
         return jsonify({'remove_task_response_status': 'remove_list_failed'})
 
 
-@app.route(ajax_route('moveTask'), methods=['POST'])
+@bp.route(ajax_route('moveTask'), methods=['POST'])
 @login_required
 def move_task():
     for i in request.form:
@@ -230,7 +223,7 @@ def move_task():
         return jsonify({'move_task_up_response_': 'move_task_up_failed'})
 
 
-@app.route(ajax_route('taskStatusChange'), methods=['POST'])
+@bp.route(ajax_route('taskStatusChange'), methods=['POST'])
 @login_required
 def task_status_change():
     for i in request.form:

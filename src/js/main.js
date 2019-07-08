@@ -44,7 +44,7 @@ export function main() {
         // });
 
 
-        $('#userLogout p').click(function () {
+        $(document).on('click', '#userLogout p', function () {
             logoutRequest()
         });
 
@@ -191,16 +191,14 @@ export function main() {
 
         function logoutRequest() {
             $.post(_routeAjax('logout'), {}).done(function (response) {
-
                 if (response['logout_response_status'] === 'logout_success') {
                     console.log(response['logout_response_status']);
-                    hideAfterLogin();
-                    showLogin();
+                    $('#userLogout').html('');
+                    $('main').html(signIn());
                 }
             }).fail(function () {
                 console.log('No logout response')
             })
-
         }
 
 

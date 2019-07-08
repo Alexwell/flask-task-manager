@@ -25,7 +25,7 @@ def registration():
     for k in request.form:
         print(f'{k} ===> {request.form[k]}')
     if current_user.is_authenticated:
-        return jsonify({'registration_response': ['User already signed in!']})
+        logout_user()
 
     form = RegistrationForm(request.form)
     print(form.validate())
@@ -41,8 +41,8 @@ def registration():
 
 @bp.route(ajax_route('login'), methods=['POST'])
 def login():
-    # if current_user.is_authenticated:
-    #     return jsonify({'login_test': 'user already signed in!'})  # TODO
+    if current_user.is_authenticated:
+        logout_user()
     form = LoginForm(request.form)
     if form.validate():
         user = User.query.filter_by(email=form.login_email.data).first()

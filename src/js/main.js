@@ -15,7 +15,7 @@ import {task} from "./templates/task";
 
 export function main() {
     $(document).ready(function () {
-        const _requestsRoute = '//json/';
+        const _requestsRoute = 'json/';
         const _validateMinLength = 3;
         const _validateMaxLength = 64;
 

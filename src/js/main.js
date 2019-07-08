@@ -16,8 +16,11 @@ import {task} from "./templates/task";
 export function main() {
     $(document).ready(function () {
         const _requestsRoute = 'json/';
-        const _validateMinLength = 3;
-        const _validateMaxLength = 64;
+        const  _validateEmailMaxLength = 50;
+        const _validatePasswordMinLength = 7;
+        const _validatePasswordMaxLength = 64;
+        const _validateListMaxLength = 50;
+        const _validateTaskMaxLength = 70;
 
 
         function _routeAjax(route) {
@@ -133,9 +136,10 @@ export function main() {
             $(this).children('td').addClass('hover-js')
         });
 
-         $(document).on('mouseout', 'tbody tr:last-child', function () {
+        $(document).on('mouseout click', 'tbody tr:last-child', function () {
             $(this).children('td').removeClass('hover-js')
         });
+
 
 
 
@@ -296,6 +300,8 @@ export function main() {
             }).done(function (response) {
                 console.log(response);
                 if (response['move_task_up_response'] === 'success') {
+                    currentTask.data('list-priority', response['new_current_task_priority']);
+                    otherTask.data('list-priority', response['new_other_task_priority']);
                     if (direction === 'up') otherTask.before(currentTask);
                     if (direction === 'down') otherTask.after(currentTask);
                 } else {
@@ -347,15 +353,14 @@ export function main() {
                     email: {
                         required: true,
                         email: true,
-                        maxlength: _validateMaxLength
+                        maxlength: _validateEmailMaxLength
                     },
                     password: {
                         required: true,
-                        minlength: _validateMinLength,
-                        maxlength: _validateMaxLength
+                        minlength: _validatePasswordMinLength,
+                        maxlength: _validatePasswordMaxLength
                     }
                 },
-                // success: 'valid',
                 submitHandler: function () {
                     loginRequest(form);
                 }
@@ -369,12 +374,12 @@ export function main() {
                     registration_email: {
                         required: true,
                         email: true,
-                        maxlength: _validateMaxLength
+                        maxlength: _validateEmailMaxLength
                     },
                     registration_password: {
                         required: true,
-                        minlength: _validateMinLength,
-                        maxlength: _validateMaxLength
+                        minlength: _validatePasswordMinLength,
+                        maxlength: _validatePasswordMaxLength
                     },
                     registration_password_confirm: {
                         equalTo: '#registrationPassword'
@@ -388,28 +393,12 @@ export function main() {
         }
 
 
-        function addTaskValidate(form) {
-            $(form).validate({
-                rules: {
-                    task_label: {
-                        required: true,
-                        maxlength: _validateMaxLength
-                    }
-                },
-                submitHandler: function () {
-                    addTask(form);
-                }
-            });
-
-        }
-
-
         function editListValidate(form) {
             $(form).validate({
                 rules: {
                     list_label: {
                         required: true,
-                        maxlength: _validateMaxLength
+                        maxlength: _validateListMaxLength
                     }
                 },
                 submitHandler: function () {
@@ -419,12 +408,27 @@ export function main() {
 
         }
 
+        function addTaskValidate(form) {
+            $(form).validate({
+                rules: {
+                    task_label: {
+                        required: true,
+                        maxlength: _validateTaskMaxLength
+                    }
+                },
+                submitHandler: function () {
+                    addTask(form);
+                }
+            });
+        }
+
+
         function editTaskValidate(form) {
             $(form).validate({
                 rules: {
                     list_label: {
                         required: true,
-                        maxlength: _validateMaxLength
+                        maxlength: _validateTaskMaxLength
                     }
                 },
                 submitHandler: function () {
@@ -432,7 +436,6 @@ export function main() {
                 }
             });
         }
-
     });
 }
 

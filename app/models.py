@@ -7,11 +7,9 @@ from app import db, login
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(50), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     lists = db.relationship('List', backref='author', lazy='dynamic')
-
-    # last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f'<User {self.email}, id {self.id}>'
@@ -25,7 +23,7 @@ class User(UserMixin, db.Model):
 
 class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(250))
+    label = db.Column(db.String(50))
     del_status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tasks = db.relationship('Tasks', backref='list', lazy='dynamic')
@@ -43,7 +41,7 @@ class List(db.Model):
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     priority = db.Column(db.Integer, default=0)
-    name = db.Column(db.String(350))
+    name = db.Column(db.String(70))
     del_status = db.Column(db.Boolean, default=False)
     done_status = db.Column(db.Boolean, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'))

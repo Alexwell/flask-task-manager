@@ -19,7 +19,10 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'login'
 
-bp = Blueprint('bp', __name__, template_folder='templates')
+bp = Blueprint('bp', __name__,
+               static_url_path='',
+               static_folder='templates',
+               template_folder='templates')
 
 
 def create_app(config_class=Config):

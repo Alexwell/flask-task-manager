@@ -27,6 +27,7 @@ export function registrationRequest(form) {
             showValidationErrors(response, form)
         }
     }).fail(function () {
+        console.log('No registration response')
     })
 }
 
@@ -41,6 +42,7 @@ export function loginRequest(form) {
             showValidationErrors(response, form);
         }
     }).fail(function () {
+        console.log('No login response')
     })
 }
 
@@ -51,20 +53,22 @@ export function logoutRequest() {
             $('main').html(signIn());
         }
     }).fail(function () {
+        console.log('No logout response')
     })
 }
 
 
 export function addTODOListRequest() {
-    $.post(_routeAjax('addTODOList'), {}).done(function (response) {
+    $.post(_routeAjax('add_todo_list'), {}).done(function (response) {
         $('#listContainer').append(list(response['current_list_id'], 'New list'));
     }).fail(function () {
+        console.log('No add_todo_list response')
     })
 }
 
 
 export function delTODOListRequest(listId, delElement) {
-    $.post(_routeAjax('delTODOList'), {
+    $.post(_routeAjax('del_todo_list'), {
         list_id: listId
     }).done(function (response) {
         if (response['remove_list_response_status'] === 'remove_list_success') {
@@ -72,12 +76,13 @@ export function delTODOListRequest(listId, delElement) {
         } else {
         }
     }).fail(function () {
+        console.log('No del_todo_list response')
     })
 }
 
 
 export function editTODOListLabelRequest(form) {
-    $.post(_routeAjax('editTODOListLabel'), {
+    $.post(_routeAjax('edit_todo_list_label'), {
         todo_list_id: form.data('list-id'),
         todo_list_name: form.children('#editListTxt').val()
     }).done(function (response) {
@@ -86,13 +91,13 @@ export function editTODOListLabelRequest(form) {
         } else {
             showValidationErrors(response, form);
         }
-
     }).fail(function () {
+        console.log('No edit_todo_list_label response')
     });
 }
 
 export function addTask(form) {
-    $.post(_routeAjax('addTask'), {
+    $.post(_routeAjax('add_task'), {
         task_id: form.data('list-id'),
         task_name: form.children('#editTaskTxt').val()
     }).done(function (response) {
@@ -101,13 +106,13 @@ export function addTask(form) {
         } else {
             showValidationErrors(response, form);
         }
-
     }).fail(function () {
+        console.log('No add_task response')
     })
 }
 
 export function editTaskLabelRequest(form) {
-    $.post(_routeAjax('editTaskLabel'), {
+    $.post(_routeAjax('edit_task_label'), {
         task_id: form.data('list-id'),
         task_name: form.children('#editListTxt').val()
     }).done(function (response) {
@@ -116,14 +121,14 @@ export function editTaskLabelRequest(form) {
         } else {
             showValidationErrors(response, form);
         }
-
     }).fail(function () {
+        console.log('No edit_task_label response')
     });
 }
 
 
 export function delTaskRequest(taskId, delElement) {
-    $.post(_routeAjax('delTask'), {
+    $.post(_routeAjax('del_task'), {
         task_id: taskId
     }).done(function (response) {
         if (response['remove_task_response_status'] === 'success') {
@@ -131,20 +136,22 @@ export function delTaskRequest(taskId, delElement) {
         } else {
         }
     }).fail(function () {
+        console.log('No del_task response')
     })
 }
 
 export function taskStatusChangeRequest(taskId) {
-    $.post(_routeAjax('taskStatusChange'), {
+    $.post(_routeAjax('task_status_change'), {
         task_id: taskId
     }).done(function (response) {
     }).fail(function () {
+        console.log('No task_status_change response')
     })
 
 }
 
 export function moveRequest(currentTask, otherTask, direction = 'up') {
-    $.post(_routeAjax('moveTask'), {
+    $.post(_routeAjax('move_task'), {
         current_task_priority: currentTask.data('list-priority'),
         other_task_priority: otherTask.data('list-priority'),
     }).done(function (response) {
@@ -156,5 +163,6 @@ export function moveRequest(currentTask, otherTask, direction = 'up') {
         } else {
         }
     }).fail(function () {
+        console.log('No move_task response')
     })
 }

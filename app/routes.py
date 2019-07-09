@@ -68,7 +68,7 @@ def logout():
     return jsonify({'logout_response_status': 'logout_success'})
 
 
-@bp.route(ajax_route('addTODOList'), methods=['POST'])
+@bp.route(ajax_route('add_todo_list'), methods=['POST'])
 @login_required
 def add_todo_list():
     add_list = List(user_id=current_user.id)
@@ -79,7 +79,7 @@ def add_todo_list():
                     'current_list_id': list_id.id})
 
 
-@bp.route(ajax_route('delTODOList'), methods=['POST'])
+@bp.route(ajax_route('del_todo_list'), methods=['POST'])
 @login_required
 def del_todo_list():
     list_to_del = List.query.filter_by(id=request.form['list_id']).first()
@@ -91,7 +91,7 @@ def del_todo_list():
         return jsonify({'remove_list_response_status': 'remove_list_failed'})
 
 
-@bp.route(ajax_route('editTODOListLabel'), methods=['POST'])
+@bp.route(ajax_route('edit_todo_list_label'), methods=['POST'])
 @login_required
 def edit_todo_list_label():
     form = EditListForm(request.form)
@@ -108,7 +108,7 @@ def edit_todo_list_label():
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('addTask'), methods=['POST'])
+@bp.route(ajax_route('add_task'), methods=['POST'])
 @login_required
 def add_task():
     form = EditTaskForm(request.form)
@@ -127,7 +127,7 @@ def add_task():
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('editTaskLabel'), methods=['POST'])
+@bp.route(ajax_route('edit_task_label'), methods=['POST'])
 @login_required
 def edit_task_label():
     form = EditTaskForm(request.form)
@@ -144,7 +144,7 @@ def edit_task_label():
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('delTask'), methods=['POST'])
+@bp.route(ajax_route('del_task'), methods=['POST'])
 @login_required
 def del_task():
     task_to_del = Tasks.query.filter_by(id=request.form['task_id']).first()
@@ -156,7 +156,7 @@ def del_task():
         return jsonify({'remove_task_response_status': 'remove_list_failed'})
 
 
-@bp.route(ajax_route('moveTask'), methods=['POST'])
+@bp.route(ajax_route('move_task'), methods=['POST'])
 @login_required
 def move_task():
     current_task = Tasks.query.filter_by(priority=request.form['current_task_priority']).first()
@@ -171,7 +171,7 @@ def move_task():
         return jsonify({'move_task_up_response_': 'move_task_up_failed'})
 
 
-@bp.route(ajax_route('taskStatusChange'), methods=['POST'])
+@bp.route(ajax_route('task_status_change'), methods=['POST'])
 @login_required
 def task_status_change():
     task = Tasks.query.filter_by(id=request.form['task_id']).first()

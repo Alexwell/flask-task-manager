@@ -2,7 +2,10 @@
 import {main} from './main';
 
 
-main();
+if (navigator.cookieEnabled) {
+    main();
+}
+else  alert('You must enable cookies');
 
 
 

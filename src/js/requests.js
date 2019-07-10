@@ -3,7 +3,7 @@ import {registrationSuccess} from "./templates/registrationSuccess";
 import {signIn} from "./templates/signIn";
 import {list} from "./templates/list";
 import {task} from "./templates/task";
-import {showAfterLogin, showValidationErrors} from "./templates/views";
+import {viewAfterLogin, showValidationErrors} from "./views";
 
 
 const _requestsRoute = 'json/';
@@ -31,13 +31,15 @@ export function registrationRequest(form) {
     })
 }
 
+
 export function loginRequest(form) {
     $.post(_routeAjax('login'), {
         login_email: form.children('#loginEmail').val(),
         login_password: form.children('#loginPassword').val(),
     }).done(function (response) {
         if (response['login_response_status'] === 'login_success') {
-            showAfterLogin(response['user_lists']);
+            viewAfterLoginRequest()
+            // viewAfterLogin(response['user_lists']);
         } else {
             showValidationErrors(response, form);
         }
@@ -45,6 +47,18 @@ export function loginRequest(form) {
         console.log('No login response')
     })
 }
+
+
+export function viewAfterLoginRequest() {
+    $.post(_routeAjax('login_success_view'), {
+
+    }).done(function (response) {
+        viewAfterLogin(response['user_lists'])
+    }).fail(function () {
+        console.log('No viewAfterLogin response')
+    })
+}
+
 
 export function logoutRequest() {
     $.post(_routeAjax('logout'), {}).done(function (response) {
@@ -96,6 +110,7 @@ export function editTODOListLabelRequest(form) {
     });
 }
 
+
 export function addTask(form) {
     $.post(_routeAjax('add_task'), {
         task_id: form.data('list-id'),
@@ -110,6 +125,7 @@ export function addTask(form) {
         console.log('No add_task response')
     })
 }
+
 
 export function editTaskLabelRequest(form) {
     $.post(_routeAjax('edit_task_label'), {
@@ -140,6 +156,7 @@ export function delTaskRequest(taskId, delElement) {
     })
 }
 
+
 export function taskStatusChangeRequest(taskId) {
     $.post(_routeAjax('task_status_change'), {
         task_id: taskId
@@ -149,6 +166,7 @@ export function taskStatusChangeRequest(taskId) {
     })
 
 }
+
 
 export function moveRequest(currentTask, otherTask, direction = 'up') {
     $.post(_routeAjax('move_task'), {

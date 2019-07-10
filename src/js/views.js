@@ -1,11 +1,12 @@
 import $ from "jquery";
-import {logout} from "./logout";
-import {listsContainer} from "./listsContainer";
-import {button} from "./button";
-import {list} from "./list";
-import {task} from "./task";
+import {logout} from "./templates/logout";
+import {listsContainer} from "./templates/listsContainer";
+import {button} from "./templates/button";
+import {list} from "./templates/list";
+import {task} from "./templates/task";
 
-export function showAfterLogin(userData) {
+
+export function viewAfterLogin(userData) {
     $('#userLogout').html(logout());
     $('main').html(listsContainer()).append(button());
     if (userData.length > 0) {

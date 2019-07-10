@@ -6,7 +6,7 @@ from app.models import User, List, Tasks
 from app.forms import RegistrationForm, LoginForm, EditListForm, EditTaskForm
 
 
-def ajax_route(route):
+def _ajax_route(route):
     _default_route = '/json/'
     if isinstance(route, str):
         return _default_route + route
@@ -14,16 +14,33 @@ def ajax_route(route):
         raise TypeError('route is not string')
 
 
+def view_after_login():
+    lists = List.query.filter_by(user_id=current_user.id, del_status=False).all()
+    lists_json = []
+    counter = 0
+    for i in lists:
+        lists_json.append(i.to_json())
+        tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).order_by(Tasks.priority).all()
+        tasks_json = []
+        for j in tasks:
+            tasks_json.append((j.to_json()))
+
+        lists_json[counter]['tasks'] = tasks_json
+        counter += 1
+    return jsonify({'user_lists': lists_json})
+
+
 @bp.route('/')
 @bp.route('/index')
 def index():
-    return render_template('index.html')
-
-
-@bp.route(ajax_route('registration'), methods=['POST'])
-def registration():
     if current_user.is_authenticated:
-        logout_user()
+        view_after_login()
+        return render_template('index.html', login_status='logged_in')
+    return render_template('index.html', login_status='not_logged')
+
+
+@bp.route(_ajax_route('registration'), methods=['POST'])
+def registration():
     form = RegistrationForm(request.form)
     if form.validate():
         user = User(email=form.registration_email.data)
@@ -34,41 +51,33 @@ def registration():
     return jsonify(form.errors)
 
 
-@bp.route(ajax_route('login'), methods=['POST'])
+@bp.route(_ajax_route('login'), methods=['POST'])
 def login():
-    if current_user.is_authenticated:
-        logout_user()
     form = LoginForm(request.form)
     if form.validate():
         user = User.query.filter_by(email=form.login_email.data).first()
         if not user.check_password(form.login_password.data):
             return jsonify({'login_password': ['Wrong password.']})
-        lists = List.query.filter_by(user_id=user.id, del_status=False).all()
-        lists_json = []
-        counter = 0
-        for i in lists:
-            lists_json.append(i.to_json())
-            tasks = Tasks.query.filter_by(list_id=i.id, del_status=False).order_by(Tasks.priority).all()
-            tasks_json = []
-            for j in tasks:
-                tasks_json.append((j.to_json()))
-
-            lists_json[counter]['tasks'] = tasks_json
-            counter += 1
         login_user(user)
-        return jsonify({'login_response_status': 'login_success',
-                        'user_lists': lists_json})
+        return jsonify({'login_response_status': 'login_success'})
     else:
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('logout'), methods=['POST'])
+@bp.route(_ajax_route('login_success_view'), methods=['POST'])
+@login_required
+def login_success():
+    return view_after_login()
+
+
+@bp.route(_ajax_route('logout'), methods=['POST'])
+@login_required
 def logout():
     logout_user()
     return jsonify({'logout_response_status': 'logout_success'})
 
 
-@bp.route(ajax_route('add_todo_list'), methods=['POST'])
+@bp.route(_ajax_route('add_todo_list'), methods=['POST'])
 @login_required
 def add_todo_list():
     add_list = List(user_id=current_user.id)
@@ -79,7 +88,7 @@ def add_todo_list():
                     'current_list_id': list_id.id})
 
 
-@bp.route(ajax_route('del_todo_list'), methods=['POST'])
+@bp.route(_ajax_route('del_todo_list'), methods=['POST'])
 @login_required
 def del_todo_list():
     list_to_del = List.query.filter_by(id=request.form['list_id']).first()
@@ -91,7 +100,7 @@ def del_todo_list():
         return jsonify({'remove_list_response_status': 'remove_list_failed'})
 
 
-@bp.route(ajax_route('edit_todo_list_label'), methods=['POST'])
+@bp.route(_ajax_route('edit_todo_list_label'), methods=['POST'])
 @login_required
 def edit_todo_list_label():
     form = EditListForm(request.form)
@@ -108,7 +117,7 @@ def edit_todo_list_label():
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('add_task'), methods=['POST'])
+@bp.route(_ajax_route('add_task'), methods=['POST'])
 @login_required
 def add_task():
     form = EditTaskForm(request.form)
@@ -127,7 +136,7 @@ def add_task():
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('edit_task_label'), methods=['POST'])
+@bp.route(_ajax_route('edit_task_label'), methods=['POST'])
 @login_required
 def edit_task_label():
     form = EditTaskForm(request.form)
@@ -144,7 +153,7 @@ def edit_task_label():
         return jsonify(form.errors)
 
 
-@bp.route(ajax_route('del_task'), methods=['POST'])
+@bp.route(_ajax_route('del_task'), methods=['POST'])
 @login_required
 def del_task():
     task_to_del = Tasks.query.filter_by(id=request.form['task_id']).first()
@@ -156,7 +165,7 @@ def del_task():
         return jsonify({'remove_task_response_status': 'remove_list_failed'})
 
 
-@bp.route(ajax_route('move_task'), methods=['POST'])
+@bp.route(_ajax_route('move_task'), methods=['POST'])
 @login_required
 def move_task():
     current_task = Tasks.query.filter_by(priority=request.form['current_task_priority']).first()
@@ -171,7 +180,7 @@ def move_task():
         return jsonify({'move_task_up_response_': 'move_task_up_failed'})
 
 
-@bp.route(ajax_route('task_status_change'), methods=['POST'])
+@bp.route(_ajax_route('task_status_change'), methods=['POST'])
 @login_required
 def task_status_change():
     task = Tasks.query.filter_by(id=request.form['task_id']).first()

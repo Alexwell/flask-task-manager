@@ -1,6 +1,7 @@
-import { main } from './main';
-
 'use strict';
+import {main} from './main';
+
+
 main();
 
 

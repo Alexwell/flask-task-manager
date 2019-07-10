@@ -7,7 +7,8 @@ import {editList} from "./templates/editList";
 import {task} from "./templates/task";
 import {
     logoutRequest, addTODOListRequest, delTODOListRequest,
-    delTaskRequest, moveRequest, taskStatusChangeRequest
+    delTaskRequest, moveRequest, taskStatusChangeRequest,
+    viewAfterLoginRequest
 } from "./requests";
 
 import {
@@ -18,11 +19,15 @@ import {
 
 export function main() {
     $(document).ready(function () {
-
-
         $('body').html(header()).append(footer());
+        if ($('body').data('login-status') === 'logged_in') {
+            viewAfterLoginRequest()
+        } else $('main').html(signIn());
 
-        $('main').html(signIn());
+
+        $(document).on('click', '#signIn', function () {
+            loginValidate(($(this).parent()));
+        });
 
 
         $(document).on('click', '#userLogout p', function () {
@@ -34,13 +39,9 @@ export function main() {
             $('main').html(registration());
         });
 
+
         $(document).on('click', '#signInLink', function () {
             $('main').html(signIn());
-        });
-
-
-        $(document).on('click', '#signIn', function () {
-            loginValidate(($(this).parent()));
         });
 
 
